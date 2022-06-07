@@ -18,9 +18,11 @@ const Icons = styled(Box)(({theme})=>({
 const NavBar = () => {
   const [open, setOpen] = useState(false);  
   return (
-     <AppBar position='sticky' 
+     <AppBar position='fixed' 
         sx={{ 
-            zIndex: (theme) => theme.zIndex.drawer + 1, 
+            width: {sm: 'calc(100%- 240px)'},
+            ml: {sm: '240px'},
+            // zIndex: (theme) => theme.zIndex.drawer + 1, 
         }}>
         <StyledToolBar>
             <Typography variant='h5'

@@ -6,12 +6,12 @@ import SideBar from '../../dashboard/SideBar'
 
 const Home = () => {
   return (
-    <Box>
+    <Box sx={{display: 'flex'}}>
         <NavBar />
-      <Stack direction='row' spacing={2} justifyContent='space-between'>
+      {/* <Stack direction='row' spacing={2} justifyContent='space-between'> */}
         <SideBar />
         <PageContent /> 
-      </Stack>
+      {/* </Stack> */}
     </Box>
   )
 }

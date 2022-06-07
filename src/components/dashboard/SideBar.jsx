@@ -8,46 +8,50 @@ import { useState } from 'react';
 const SideBar = () => {
 
   return (
-    <Drawer
-      variant='permanent'
-      sx={{
-        width: 240,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
-      }}
+    <Box
+      component="nav"
+      sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }}
     >
-      <Toolbar>
-      <DashboardIcon />
-      </Toolbar>
-      <Box sx={{overflow: 'auto'}}>
-      <List component='nav'>
-          <ListItem disablePadding>
-              <ListItemButton >
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary='Dashboard'/>
-              </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-              <ListItemButton >
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary='Dashboard'/>
-              </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-              <ListItemButton >
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary='Dashboard'/>
-              </ListItemButton>
-          </ListItem>
-      </List>
-      </Box>
-    </Drawer>    
+
+      <Drawer
+        variant='permanent'
+        sx={{
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+        }}
+        open
+      >
+        <Toolbar>
+        <DashboardIcon />
+        </Toolbar>
+        <List>
+            <ListItem disablePadding>
+                <ListItemButton >
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Dashboard'/>
+                </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+                <ListItemButton >
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Dashboard'/>
+                </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+                <ListItemButton >
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='Dashboard'/>
+                </ListItemButton>
+            </ListItem>
+        </List>
+      </Drawer>    
+    </Box>
   )
 }
 
