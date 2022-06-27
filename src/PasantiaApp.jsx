@@ -1,12 +1,18 @@
-import { Button, Paper } from "@mui/material"
+import { Button, CssBaseline, Paper } from "@mui/material"
 import { ThemeProvider,createTheme } from "@mui/material/styles"
 import AppRouter from "./routers/AppRouter"
+import { AppTheme } from "./theme/AppTheme"
 
+// Material Dashboard 2 React themes
 
+// Material Dashboard 2 React Dark Mode themes
+// import themeDark from "assets/theme-dark";
 
 function PasantiaApp() {
   return (
+    <AppTheme>
       <AppRouter />
+    </AppTheme>
   )
 }
 
