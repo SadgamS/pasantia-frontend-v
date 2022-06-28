@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { LoginScreen } from '../components/auth/LoginScreen'
-import Home from '../components/pages/home/Home'
+import { LoginPage } from '../auth/pages/LoginPage'
+import Home from '../pasantia/pages/home/Home'
 
 const AppRouter = () => {
   return (
@@ -9,7 +9,7 @@ const AppRouter = () => {
         <Routes>
             <Route path='/'>
                 <Route index element={<Home />} />
-                <Route path='login' element={<LoginScreen/>}/>
+                <Route path='login' element={<LoginPage/>}/>
             </Route>
         </Routes>
     </BrowserRouter>

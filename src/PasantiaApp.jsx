@@ -1,5 +1,6 @@
 import { Button, CssBaseline, Paper } from "@mui/material"
 import { ThemeProvider,createTheme } from "@mui/material/styles"
+import { Sidenav } from "./pasantia/components/Sidenav/Sidenav"
 import AppRouter from "./routers/AppRouter"
 import { AppTheme } from "./theme/AppTheme"
 
@@ -11,6 +12,7 @@ import { AppTheme } from "./theme/AppTheme"
 function PasantiaApp() {
   return (
     <AppTheme>
+      {/* <Sidenav /> */}
       <AppRouter />
     </AppTheme>
   )
