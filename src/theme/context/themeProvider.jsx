@@ -4,9 +4,9 @@ import { themeReducer } from './themeReducer';
 
 // Initial State 
 const init = () => {
-    let mode = 'light';
-    if (localStorage.getItem('mode') !== undefined && localStorage.getItem('mode') === 'dark') {
-      mode = 'dark';
+    let darkMode = false;
+    if (localStorage.getItem('Mode') !== undefined && localStorage.getItem('Mode') === 'dark') {
+      darkMode = true;
     }
     
     return {
@@ -18,7 +18,7 @@ const init = () => {
       fixedNavbar: false,
       openConfigurator: false,
       layout: "dashboard",
-      mode: mode,
+      darkMode: darkMode,
     }
 } 
 

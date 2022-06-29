@@ -21,6 +21,7 @@ import { useForm, Controller } from "react-hook-form";
 import apiClient from "../../services/api";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
+import MDTypography from "../../theme/components/MDTypography";
 
 
 export const LoginPage = () => {
@@ -92,7 +93,7 @@ export const LoginPage = () => {
             Iniciar Sesión
           </Typography>
         </Box>
-        <Box pt={4} pb={3} px={3}>
+        <Box pt={2} pb={3} px={3}>
           <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3}>
               <Controller 
@@ -131,14 +132,15 @@ export const LoginPage = () => {
             </Box>
             <Box display="flex" alignItems="center" ml={-1} mt={1}>
               <Switch checked={showPassword} onChange={handleClickShowPassword} />
-              <Typography
-                variant="subtitle2"
+              <MDTypography
+                variant="button"
+                fontWeight="regular"
                 color="text"
                 onClick={handleClickShowPassword}
                 sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
               >
                 &nbsp;&nbsp;Mostrar Contraseña
-              </Typography>
+              </MDTypography>
             </Box>
             {error.AuthError ? (<Alert sx={{ mt: 2, fontSize: "small"}} variant="filled" severity="error">
                     Error en las credeciales!

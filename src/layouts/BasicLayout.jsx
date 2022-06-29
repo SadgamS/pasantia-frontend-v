@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React example components
 import { PageLayout } from "./layoutContainers/PageLayout";
-// import { FooterLayout } from "./FooterLayout";
+import { FooterLayout } from "./FooterLayout";
 
 export const BasicLayout = ({ image, children }) => {
   return (
@@ -34,7 +34,7 @@ export const BasicLayout = ({ image, children }) => {
           </Grid>
         </Grid>
       </Box>
-      {/* <FooterLayout light/>   */}
+      <FooterLayout light/>  
     </PageLayout>
   )
 }

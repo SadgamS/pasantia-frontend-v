@@ -3,9 +3,19 @@ import borders from "./base/borders";
 import boxShadows from "./base/boxShadows";
 import breakpoints from "./base/breakpoints";
 import colors from "./base/colors";
+import globals from "./base/globals";
 import typography from "./base/typography";
+import breadcrumbs from "./components/breadcrumbs";
 import card from "./components/card";
+import divider from "./components/divider";
+import input from "./components/input";
+import inputLabel from "./components/inputLabel";
+import inputOutlined from "./components/inputOutlined";
+import list from "./components/list";
+import listItem from "./components/listItem";
+import listItemText from "./components/listItemText";
 import sidenav from "./components/sidenav";
+import textField from "./components/textField";
 
 import boxShadow from "./functions/boxShadow";
 import hexToRgb from "./functions/hexToRgb";
@@ -19,7 +29,7 @@ export default createTheme({
     palette: {...colors},
     boxShadows: {...boxShadows},
     borders: {...borders},
-    // typography: {...typography},
+    typography: {...typography},
     functions:{
         boxShadow,
         hexToRgb,
@@ -28,7 +38,21 @@ export default createTheme({
         rgba,
     },
     components:{
+        MuiCssBaseline: {
+            styleOverrides:{
+                ...globals,
+            }
+        },
+        MuiBreadcrumbs: { ...breadcrumbs },
         MuiDrawer: { ...sidenav },
-        MuiCard: {...card}
+        MuiDivider: { ...divider },
+        MuiCard: {...card},
+        MuiList: { ...list },
+        MuiListItem: { ...listItem },
+        MuiListItemText: { ...listItemText },
+        MuiTextField: { ...textField },
+        MuiInput: { ...input },
+        MuiInputLabel: { ...inputLabel },
+        MuiOutlinedInput: { ...inputOutlined },
     }
 })
