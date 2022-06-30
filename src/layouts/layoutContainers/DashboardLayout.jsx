@@ -3,6 +3,8 @@ import { useEffect, useContext } from "react";
 
 // react-router-dom components
 import { useLocation } from "react-router-dom";
+import { Navbar } from "../../pasantia/components/Navbar/Navbar";
+import { Sidenav } from "../../pasantia/components/Sidenav/Sidenav";
 
 
 // Material Dashboard 2 React context
@@ -30,6 +32,8 @@ const DashboardLayout = ({ children }) => {
         },
       })}
     >
+      <Sidenav />
+      <Navbar />
       {children}
     </Box>
   )

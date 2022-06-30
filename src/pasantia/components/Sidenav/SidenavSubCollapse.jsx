@@ -7,17 +7,17 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import MDBox from '../../../theme/components/MDBox';
 import { collapseIcon, collapseIconBox, collapseItem, collapseText } from './styles/sidenavCollapse';
 import { CustomTheme } from '../../../theme/context/themeContext';
+import { NavLink } from 'react-router-dom';
 
 export const SidenavSubCollapse = ({ name, icon, items, active }) => {
 
-    const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = useContext( CustomTheme );
-    const collapseName = location.pathname.replace("/", "");
-    const [open, setOpen] = useState(false);
-    const handleClick = () => {
-        setOpen((prev) => !prev)
-    }
+  const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = useContext( CustomTheme );
+  const collapseName = location.pathname.replace("/", "");
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+      setOpen((prev) => !prev)
+  }
 
-   console.log(items)
   return (
     <>
         <ListItem button onClick={handleClick}>
@@ -58,10 +58,14 @@ export const SidenavSubCollapse = ({ name, icon, items, active }) => {
             </MDBox>
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
-            <List sx={{pl:3}}>
+            <List sx={{pl:2}}>
                 {
-                    items.map(({name, key, icon}) => 
-                        (<SidenavCollapse name={name} key={key} icon={icon} active={key === collapseName}/>)
+                    items.map(({name, key, icon, route}) => 
+                        (
+                          <NavLink key={key} to={route}>
+                            <SidenavCollapse name={name} icon={icon} active={key === collapseName}/>
+                          </NavLink>
+                        )
                     ) 
    
                 }

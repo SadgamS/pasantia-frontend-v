@@ -13,7 +13,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { AppBar, Box, IconButton, Menu, Toolbar } from '@mui/material'
 
-import { navbar, navbarContainer, navbarRow } from './styles';
+import { navbar, navbarContainer, navbarMobileMenu, navbarRow } from './styles';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import NotificationItem from '../Items/NotificationItem/NotificationItem';
 import MDBox from '../../../theme/components/MDBox';
@@ -90,14 +90,14 @@ export const Navbar = ({ absolute, light, isMini}) => {
               mb={{xs:1, md:0}}
               sx={(theme) => navbarRow(theme, { isMini })}
             >
-              <Box
+              {/* <Box
                 display={{ xs: "none", xl: "block" }}   
                 sx={{pr: 1}}   
               >
                   <IconButton color="inherit" disableRipple onClick={handleMiniSidenav}>
                     {miniSidenav ? <MenuOpenIcon /> : <MenuIcon /> }
                   </IconButton>
-              </Box>
+              </Box> */}
               <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
             </MDBox>
             {isMini ? null: ( 
@@ -107,6 +107,7 @@ export const Navbar = ({ absolute, light, isMini}) => {
                 <MDBox color={ light ? "white" : "inherit"} >
                   <IconButton 
                     color="inherit"
+                    sx={navbarMobileMenu}
                     onClick={handleMiniSidenav}
                   >
                     {miniSidenav ? <MenuOpenIcon /> : <MenuIcon /> }
@@ -140,3 +141,10 @@ export const Navbar = ({ absolute, light, isMini}) => {
     </AppBar>
   )
 }
+
+// Setting default values for the props of DashboardNavbar
+Navbar.defaultProps = {
+  absolute: false,
+  light: false,
+  isMini: false,
+};
