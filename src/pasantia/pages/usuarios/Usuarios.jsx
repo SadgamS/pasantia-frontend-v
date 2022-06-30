@@ -3,7 +3,7 @@ import { Box, Button, ButtonGroup, Card, Grid, Icon, Modal, TextField } from "@m
 import DashboardLayout from "../../../layouts/layoutContainers/DashboardLayout"
 import MDBox from "../../../theme/components/MDBox"
 import MDTypography from "../../../theme/components/MDTypography"
-import { DataGrid, esES } from "@mui/x-data-grid"
+import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid"
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from "react-router-dom"
 
@@ -57,6 +57,8 @@ export const Usuarios = () => {
                <Box mt={4} width={"100%"} height={400}>
                      <DataGrid rows={rows} columns={columns}
                          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                         components={{Toolbar: GridToolbar}}
+                         componentsProps={{ toolbar: {showQuickFilter: true}}}
                      />   
                 </Box>
                 </Grid>
