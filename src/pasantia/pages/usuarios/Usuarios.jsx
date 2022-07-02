@@ -1,49 +1,51 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Box, Button, ButtonGroup, Card, Grid, Icon, Modal, TextField } from "@mui/material"
 import DashboardLayout from "../../../layouts/layoutContainers/DashboardLayout"
 import MDBox from "../../../theme/components/MDBox"
 import MDTypography from "../../../theme/components/MDTypography"
-import { DataGrid, esES, GridToolbar } from "@mui/x-data-grid"
+import { DataGrid, esES, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid"
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from "react-router-dom"
-
+import axios from "axios"
+import ContactPageIcon from '@mui/icons-material/ContactPage';
 
 export const Usuarios = () => {
-   const [open, setOpen] = useState(false);
-   const handleOpen = () => setOpen(true);
-   const handleClose = () => setOpen(false);
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/users')
+      .then(response =>{
+        setUsers(response.data.data)
+      })
+  }, [])
+
+  console.log(users)
+  const getRol = (params) => {
+      return `${params.row.rol.tipo_rol} `
+  }
+
+  const getPersona = (params) => {
+    return `${params.row.persona.nombres} ${params.row.persona.apellidos}`
+  }
    const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
+    { field: 'id', headerName: 'ID', width: 60 },
+    { field: 'name', headerName: 'Usuario', width: 180 },
+    { field: 'email', headerName: 'Email', width: 230 },
+    { field: 'created_at', headerName: 'Creado en', type:'dateTime' ,width: 180 },
+    { field: 'rol', headerName: 'Rol' ,width: 110, valueGetter: getRol },
+    { field: 'persona', headerName: 'Persona' ,width: 180, valueGetter: getPersona },
     {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 90,
-    },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
+      field: 'actions',
+      type: 'actions',
+      width: 80,
+      getActions: (params) =>[
+          <GridActionsCellItem
+            icon={<ContactPageIcon color="info" /> }
+            label="ver" 
+          />,
+      ],
+    }
   ];
   
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ];
   return (
     <DashboardLayout>
         <MDBox mt={2} mb={2}>
@@ -54,11 +56,15 @@ export const Usuarios = () => {
                     Agregar Usuario
                 </Button>
                    </Link>
-               <Box mt={4} width={"100%"} height={400}>
-                     <DataGrid rows={rows} columns={columns}
+               <Box mt={4} width={"100%"} height={500} p={1} >
+                     <DataGrid 
+                         sx={{fontSize: "small"}}
+                         rows={users} columns={columns}
                          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                          components={{Toolbar: GridToolbar}}
                          componentsProps={{ toolbar: {showQuickFilter: true}}}
+                         pageSize={5}
+                         rowsPerPageOptions={[5]}
                      />   
                 </Box>
                 </Grid>
