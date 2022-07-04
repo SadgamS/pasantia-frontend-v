@@ -6,6 +6,12 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import SaveIcon from '@mui/icons-material/Save';
 import axios from 'axios';
 
+import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { useForm, Controller } from "react-hook-form";
+import { Box } from '@mui/system'
+
 export const CrearUsuario = () => {
   const [personas, setPersonas] = useState([]);
   const [rols, setRols] = useState([]);
@@ -14,7 +20,8 @@ export const CrearUsuario = () => {
   const [datos, setDatos] = useState(
     {
       name: '',
-      contraseña: ''
+      contraseña: '',
+      correo: ''
     }
   )
   
@@ -30,26 +37,25 @@ export const CrearUsuario = () => {
     });
   }, [])
   
-  
-  
-  console.log(rolValue)
-  // const name = value.nombres.charAt(0);
-  // console.log(name)  
-  // let name, ci = ''
-  // if (value != undefined) {
-  //   name = value.nombres.charAt(0)+value.apellidos.toLowerCase();
-  //   ci = value.ci
-  // }
-
   const handleData = (e, newValue) => {
-    console.log(newValue)
     setValue( newValue );
     setDatos({
-      name: newValue.nombres.charAt(0)+newValue.apellidos.toLowerCase(),
-      contraseña: newValue.ci
+      name: newValue.ci,
+      contraseña: newValue.ci+newValue.extension.toLowerCase(),
     })
   }
 
+  const schema = yup.object({
+
+  }).required()
+
+  const { handleSubmit, control } = useForm({
+ 
+    resolver: yupResolver(schema)
+  });
+
+  const onSubmit = (data) => console.log(data)
+  
   return (
     <DashboardLayout>
       <Card
@@ -62,6 +68,7 @@ export const CrearUsuario = () => {
           flexGrow: 1
         }}
       >
+          <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3} alignItems="center" p={2}>
           <Grid item xs={12}>
             <MDTypography variant="h5" fontWeight="medium">
@@ -76,7 +83,7 @@ export const CrearUsuario = () => {
               value={value}
               onChange={handleData}
               options={personas}
-              getOptionLabel={(option) => (option.nombres+' '+option.apellidos)}
+              getOptionLabel={(option) => (option.primer_nombre+' '+option.apellido_paterno)}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               renderInput={(params) => <TextField {...params} variant="standard" label="Personas"/>}
               />
@@ -100,14 +107,37 @@ export const CrearUsuario = () => {
           </Grid>
           <Grid item container mt={1} spacing={2}>
 
-          <Grid item xs={12} sm={4}>
-            <TextField variant="standard" label="Usuario" value={datos.name}  placeholder="Nombre de usuario" fullWidth focused />
+          <Grid item xs={12} sm={5}>
+            <Controller 
+              name="Usuario"
+              control={control}
+              defaultValue={datos.name} 
+              render={({field: {onChange, value=datos.name}}) => (
+                <TextField 
+                  variant="standard" 
+                  label="Usuario"
+                  value={value}
+                  onChange={onChange}
+                  fullWidth
+                />
+              )}
+            />
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField type="email" variant="standard" label="Email"  placeholder="Email"  fullWidth focused/>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField type="password" variant="standard" label="Contraseña"  placeholder="Contraseña CI" value={datos.contraseña} fullWidth focused/>
+          <Grid item xs={12} sm={5}>
+            <Controller 
+              name="password"
+              control={control}
+              render={({field: {onChange, value=datos.contraseña}}) => (
+                <TextField 
+                  type="password" 
+                  variant="standard" 
+                  label="Contraseña"
+                  onChange={onChange}  
+                  value={value} 
+                  fullWidth
+                />
+              )}
+            />
           </Grid>
         </Grid>
         </Grid>
@@ -123,13 +153,15 @@ export const CrearUsuario = () => {
               Cancelar
             </Button> 
            <LoadingButton
+              type='submit'
               color="info"
               variant="outlined"
               startIcon={<SaveIcon />}
-           >
+              >
               Guardar
             </LoadingButton>
         </Stack>
+        </Box>
       </Card>
     </DashboardLayout>
   )

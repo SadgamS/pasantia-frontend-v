@@ -24,12 +24,12 @@ export const Usuarios = () => {
   }
 
   const getPersona = (params) => {
-    return `${params.row.persona.nombres} ${params.row.persona.apellidos}`
+    return `${params.row.persona.primer_nombre} ${params.row.persona.apellido_paterno}`
   }
    const columns = [
     { field: 'id', headerName: 'ID', width: 60 },
-    { field: 'name', headerName: 'Usuario', width: 180 },
-    { field: 'email', headerName: 'Email', width: 230 },
+    { field: 'usuario', headerName: 'Usuario', width: 180 },
+    { field: 'ultimo_ingreso', headerName: 'Ultimo ingreso', type:'dateTime', width: 230 },
     { field: 'created_at', headerName: 'Creado en', type:'dateTime' ,width: 180 },
     { field: 'rol', headerName: 'Rol' ,width: 110, valueGetter: getRol },
     { field: 'persona', headerName: 'Persona' ,width: 180, valueGetter: getPersona },

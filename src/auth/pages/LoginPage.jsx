@@ -52,7 +52,7 @@ export const LoginPage = () => {
     apiClient.get('/sanctum/csrf-cookie')
     .then(response => {
       apiClient.post('/login', {
-          name: data.Usuario,
+          usuario: data.Usuario,
           password: data.Contraseña
       }).then(response => {
           if (response.status === 200) {
