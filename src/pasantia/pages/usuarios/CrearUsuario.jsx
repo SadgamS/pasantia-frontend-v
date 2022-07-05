@@ -11,12 +11,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useForm, Controller } from "react-hook-form";
 import { Box } from '@mui/system'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const CrearUsuario = () => {
   const [personas, setPersonas] = useState([]);
   const [rols, setRols] = useState([]);
   const [rol, setRol] = useState(null);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/personas/users')
     .then((response) => {
@@ -25,22 +27,42 @@ export const CrearUsuario = () => {
 
     axios.get('http://127.0.0.1:8000/api/rols')
     .then((response) => {
-       setRols(response.data)
+       setRols([...response.data])
     });
   }, [])
+
+  // useEffect(() =>{
+  //   let active =true;
+  //   if (!loading) {
+  //      return undefined; 
+  //   }
+
+  //   (async () => {
+  //     const response = await axios.get('http://127.0.0.1:8000/api/rols');
+  //     if (active) {
+  //       setRols([...response.data])
+  //     }
+
+  //   })();
+  //   return () => {
+  //     active = false
+  //   }
+    
+  // }, [loading])
   
-  // const handleData = (e, newValue) => {
-  //   setPersona( newValue );
-  //   console.log(persona)
+  // // const handleData = (e, newValue) => {
+  // //   setPersona( newValue );
+  // //   console.log(persona)
    
-  // }
+  // // }
 
   const schema = yup.object({
     Usuario: yup.string().required("Ingresa un usuario").min(4, "Minimo 4 caracteres"),
-    Contraseña: yup.string().required("Ingresa una contraseña").min(4, "Minimo 4 caracteres"),
+    Contraseña: yup.string().lowercase().trim().required("Ingresa una contraseña").min(4, "Minimo 4 caracteres"),
+    rol: yup.object().nullable().required("Ingresa un rol"),
   }).required()
 
-  const { handleSubmit, control, setValue, reset } = useForm({
+  const { handleSubmit, control, setValue, resetField, formState: {errors}, clearErrors } = useForm({
     defaultValues:{
       Usuario: "",
       Contraseña: '',
@@ -50,7 +72,6 @@ export const CrearUsuario = () => {
     resolver: yupResolver(schema)
   });
 
-  console.log('persona')
   const onSubmit = (data) => console.log(data)
   
   return (
@@ -77,14 +98,15 @@ export const CrearUsuario = () => {
           <Grid item xs={12} sm={5} >
             <Autocomplete 
               id='people'
-          
               onChange={(e,newValue) => { 
                 if (newValue != undefined) {
                   setValue('Usuario', newValue.ci)
                   setValue('id_persona', newValue.id)
-                  setValue('Contraseña', newValue.ci+newValue.extension.toLowerCase())
+                  setValue('Contraseña', newValue.ci+newValue.extension)
+                  clearErrors(['Usuario', 'Contraseña'])
                 } else {
-                  reset()
+                  resetField("Usuario")
+                  resetField("Contraseña")
                 }
               }}
               options={personas}
@@ -94,19 +116,30 @@ export const CrearUsuario = () => {
               />
           </Grid>
           <Grid item xs={12} sm={2}>
-              <Autocomplete 
-                  onChange={(e,newValue) => {
-                    if (newValue != undefined) {
-                      setValue('id_rol',newValue.id)
-                      setRol(newValue)
-                    }else {
-                      setRol(null)
-                    }
-                  }}
-                  options={rols}
-                  getOptionLabel={(option) => (option.tipo_rol)}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  renderInput={(params) => <TextField {...params} variant="standard" label="Rol" required/>}
+              <Controller 
+                render={({field: {onChange}}) => (
+                  <Autocomplete 
+                    options={rols}
+                    isOptionEqualToValue={(option, value) => option.tipo_rol === value.tipo_rol}
+                    getOptionLabel={(option) => option.tipo_rol}
+                    renderInput={(params) =>(
+                      <TextField 
+                        { ...params }
+                        error={!!errors.rol}
+                        helperText={ errors.rol ? errors.rol.message : null}
+                        label="Roles"
+                        variant="standard"
+                      />
+                    )}
+                    onChange={(_, data) => {
+                      onChange(data)
+                      setRol(data)
+                    }}
+                  />
+                )}
+                defaultValue={null} 
+                name="rol"
+                control={control}
               />
           </Grid>
           <Grid item sm={5}>
@@ -162,11 +195,13 @@ export const CrearUsuario = () => {
           p={2}
           mt={2}
           >
-            <Button>
-              Cancelar
-            </Button> 
+            <Link to="/usuarios">
+              <Button>
+                Cancelar
+              </Button> 
+            </Link>
            <LoadingButton
-              type='submit'
+              type="submit"
               color="info"
               variant="outlined"
               startIcon={<SaveIcon />}
