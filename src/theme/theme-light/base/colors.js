@@ -185,7 +185,7 @@ const colors = {
     dark: "#404040",
   },
 
-  inputBorderColor: "#d2d6da",
+  inputBorderColor: "#7eb3f7",
 
   tabs: {
     indicator: { boxShadow: "#ddd" },

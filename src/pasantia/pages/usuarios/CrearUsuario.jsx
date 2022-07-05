@@ -15,15 +15,7 @@ import { Box } from '@mui/system'
 export const CrearUsuario = () => {
   const [personas, setPersonas] = useState([]);
   const [rols, setRols] = useState([]);
-  const [value, setValue] = useState(null);
-  const [rolValue, setRolValue] = useState(null);
-  const [datos, setDatos] = useState(
-    {
-      name: '',
-      contraseña: '',
-      correo: ''
-    }
-  )
+  const [rol, setRol] = useState(null);
   
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/personas/users')
@@ -37,23 +29,28 @@ export const CrearUsuario = () => {
     });
   }, [])
   
-  const handleData = (e, newValue) => {
-    setValue( newValue );
-    setDatos({
-      name: newValue.ci,
-      contraseña: newValue.ci+newValue.extension.toLowerCase(),
-    })
-  }
+  // const handleData = (e, newValue) => {
+  //   setPersona( newValue );
+  //   console.log(persona)
+   
+  // }
 
   const schema = yup.object({
-
+    Usuario: yup.string().required("Ingresa un usuario").min(4, "Minimo 4 caracteres"),
+    Contraseña: yup.string().required("Ingresa una contraseña").min(4, "Minimo 4 caracteres"),
   }).required()
 
-  const { handleSubmit, control } = useForm({
- 
+  const { handleSubmit, control, setValue, reset } = useForm({
+    defaultValues:{
+      Usuario: "",
+      Contraseña: '',
+      id_persona:'',
+      
+    },
     resolver: yupResolver(schema)
   });
 
+  console.log('persona')
   const onSubmit = (data) => console.log(data)
   
   return (
@@ -80,8 +77,16 @@ export const CrearUsuario = () => {
           <Grid item xs={12} sm={5} >
             <Autocomplete 
               id='people'
-              value={value}
-              onChange={handleData}
+          
+              onChange={(e,newValue) => { 
+                if (newValue != undefined) {
+                  setValue('Usuario', newValue.ci)
+                  setValue('id_persona', newValue.id)
+                  setValue('Contraseña', newValue.ci+newValue.extension.toLowerCase())
+                } else {
+                  reset()
+                }
+              }}
               options={personas}
               getOptionLabel={(option) => (option.primer_nombre+' '+option.apellido_paterno)}
               isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -89,19 +94,24 @@ export const CrearUsuario = () => {
               />
           </Grid>
           <Grid item xs={12} sm={2}>
-            <Autocomplete 
-              id='rol'
-              value={rolValue}
-              onChange={(e,newValue) => setRolValue(newValue)}
-              options={rols}
-              getOptionLabel={(option) => (option.tipo_rol)}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              renderInput={(params) => <TextField {...params} variant="standard" label="Rol"/>}
-            />
+              <Autocomplete 
+                  onChange={(e,newValue) => {
+                    if (newValue != undefined) {
+                      setValue('id_rol',newValue.id)
+                      setRol(newValue)
+                    }else {
+                      setRol(null)
+                    }
+                  }}
+                  options={rols}
+                  getOptionLabel={(option) => (option.tipo_rol)}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  renderInput={(params) => <TextField {...params} variant="standard" label="Rol" required/>}
+              />
           </Grid>
           <Grid item sm={5}>
-            {rolValue != null ? <Alert severity='info' sx={{fontSize: "small"}}>
-                { rolValue.descripcion }
+            {rol != null ? <Alert severity='info' sx={{fontSize: "small"}}>
+                { rol.descripcion }
             </Alert>: null}
           </Grid>
           </Grid>
@@ -111,13 +121,14 @@ export const CrearUsuario = () => {
             <Controller 
               name="Usuario"
               control={control}
-              defaultValue={datos.name} 
-              render={({field: {onChange, value=datos.name}}) => (
-                <TextField 
-                  variant="standard" 
+              render={({field: {onChange, value}, fieldState: {error}}) => (
+                <TextField
                   label="Usuario"
                   value={value}
                   onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  focused
                   fullWidth
                 />
               )}
@@ -125,16 +136,18 @@ export const CrearUsuario = () => {
           </Grid>
           <Grid item xs={12} sm={5}>
             <Controller 
-              name="password"
+              name="Contraseña"
               control={control}
-              render={({field: {onChange, value=datos.contraseña}}) => (
+              render={({field: {onChange, value}, fieldState:{ error}}) => (
                 <TextField 
                   type="password" 
-                  variant="standard" 
                   label="Contraseña"
                   onChange={onChange}  
-                  value={value} 
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null} 
                   fullWidth
+                  focused
                 />
               )}
             />

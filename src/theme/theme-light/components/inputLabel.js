@@ -2,7 +2,7 @@
 import colors from "../base/colors";
 import typography from "../base/typography";
 
-const { text, info } = colors;
+const { text, info, error } = colors;
 const { size } = typography;
 
 const inputLabel = {
@@ -24,6 +24,11 @@ const inputLabel = {
           fontSize: "0.85em",
         },
       },
+      "&.Mui-error": {
+        "&.Mui-focused": {
+          color: error.main,
+        },
+      }
     },
 
     sizeSmall: {

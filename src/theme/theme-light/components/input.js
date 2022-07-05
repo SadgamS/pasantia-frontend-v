@@ -4,9 +4,9 @@ import colors from "../base/colors";
 import typography from "../base/typography";
 import borders from "../base/borders";
 
-const { info, inputBorderColor, dark } = colors;
+const { info, dark } = colors;
 const { size } = typography;
-const { borderWidth } = borders;
+// const { borderWidth } = borders;
 
 const input = {
   styleOverrides: {
@@ -14,13 +14,9 @@ const input = {
       fontSize: size.sm,
       color: dark.main,
 
-      "&:hover:not(.Mui-disabled):before": {
-        borderBottom: `${borderWidth[1]} solid ${inputBorderColor}`,
-      },
-
-      "&:before": {
-        borderColor: inputBorderColor,
-      },
+      // "&:hover:not(.Mui-disabled):before": {
+      //   borderBottom: `${borderWidth[1]} solid ${inputBorderColor}`,
+      // },
 
       "&:after": {
         borderColor: info.main,
