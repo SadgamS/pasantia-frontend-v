@@ -13,11 +13,17 @@ export const SidenavSubCollapse = ({ name, icon, items, active }) => {
 
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = useContext( CustomTheme );
   const collapseName = location.pathname.replace("/", "");
-  const [open, setOpen] = useState(items.find(i=> (i.key === collapseName)));
+  let esActivo = false
+  items.forEach(i => {
+    if (i.key === collapseName) {
+      esActivo = true
+    }
+  });
+ 
+  const [open, setOpen] = useState(esActivo);
   const handleClick = () => {
       setOpen((prev) => !prev)
   }
-  
   return (
     <>
         <ListItem button onClick={handleClick}>

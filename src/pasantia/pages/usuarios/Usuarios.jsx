@@ -13,13 +13,19 @@ import axios from "axios"
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { TableGrid } from "../../components/Table/TableGrid"
 
 export const Usuarios = () => {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/users')
       .then(response =>{
         setUsers(response.data.data)
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error)
       })
   }, [])
 
@@ -58,24 +64,6 @@ export const Usuarios = () => {
       ],
     }
   ];
-
-  function CustomToolbar() {
-    return (
-      <>
-      <GridToolbarContainer >
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarDensitySelector /> 
-        <Box flex={1}/>
-        <GridToolbarQuickFilter />
-      </GridToolbarContainer>
-
-        {/* <GridToolbarContainer sx={{display:"flex", justifyContent:"flex-end" }}>
-        </GridToolbarContainer> */}
-      </> 
- 
-    );
-  }
   
   return (
     <DashboardLayout>
@@ -87,24 +75,7 @@ export const Usuarios = () => {
                     Agregar Usuario
                 </Button>
                    </Link>
-               {/* <Box mt={4} width={"100%"} height={500} p={1} > */}
-               <div style={{ height:450, width: "100%", marginTop: 30}}>
-                  <div style={{display: "flex", height: "100%"}}>
-                    <div style={{flexGrow: 1}}>
-                     <DataGrid 
-                         sx={{fontSize: 14}}
-                         rows={users} columns={columns}
-                         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                         components={{Toolbar: CustomToolbar}}
-                        //  componentsProps={ {toolbar: {showQuickFilter: true}}}
-                         pageSize={5}
-                         rowsPerPageOptions={[5]}
-                     />   
-
-                    </div>
-                  </div>
-               </div>
-                {/* </Box> */}  
+                <TableGrid rows={users} columns={columns} loading={loading}/>
                 </Grid>
             </Grid>
         </MDBox>
