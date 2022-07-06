@@ -9,19 +9,15 @@ import { collapseIcon, collapseIconBox, collapseItem, collapseText } from './sty
 import { CustomTheme } from '../../../theme/context/themeContext';
 import { NavLink } from 'react-router-dom';
 
-export const SidenavSubCollapse = ({ name, icon, items, key, active }) => {
+export const SidenavSubCollapse = ({ name, icon, items, active }) => {
 
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = useContext( CustomTheme );
   const collapseName = location.pathname.replace("/", "");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(items.find(i=> (i.key === collapseName)));
   const handleClick = () => {
       setOpen((prev) => !prev)
   }
-  console.log(collapseName)
-  if (key) {
-    setOpen(true);
-  }
-
+  
   return (
     <>
         <ListItem button onClick={handleClick}>

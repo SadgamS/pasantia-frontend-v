@@ -15,6 +15,8 @@ import inputOutlined from "./components/inputOutlined";
 import list from "./components/list";
 import listItem from "./components/listItem";
 import listItemText from "./components/listItemText";
+import menu from "./components/menu";
+import menuItem from "./components/menuItem";
 import sidenav from "./components/sidenav";
 import tableContainer from "./components/tableContainer";
 import textField from "./components/textField";
@@ -58,5 +60,7 @@ export default createTheme({
         MuiInputLabel: { ...inputLabel },
         MuiOutlinedInput: { ...inputOutlined },
         MuiDataGrid: { ...tableContainer },
+        MuiMenu: { ...menu },
+        MuiMenuItem: { ...menuItem }
     }
 })

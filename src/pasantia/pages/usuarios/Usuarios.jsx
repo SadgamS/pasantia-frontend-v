@@ -3,14 +3,16 @@ import { Box, Button, ButtonGroup, Card, Grid, Icon, Modal, TextField } from "@m
 import DashboardLayout from "../../../layouts/layoutContainers/DashboardLayout"
 import MDBox from "../../../theme/components/MDBox"
 import MDTypography from "../../../theme/components/MDTypography"
-import { DataGrid, esES, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid"
+import { DataGrid, esES, GridToolbar, GridActionsCellItem, GridToolbarContainer, GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter } from "@mui/x-data-grid"
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from "react-router-dom"
 import axios from "axios"
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { display } from "@mui/system"
 
 export const Usuarios = () => {
   const [users, setUsers] = useState([])
@@ -21,7 +23,6 @@ export const Usuarios = () => {
       })
   }, [])
 
-  console.log(users)
   const getRol = (params) => {
       return `${params.row.rol.tipo_rol} `
   }
@@ -57,6 +58,24 @@ export const Usuarios = () => {
       ],
     }
   ];
+
+  function CustomToolbar() {
+    return (
+      <>
+      <GridToolbarContainer >
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector /> 
+        <Box flex={1}/>
+        <GridToolbarQuickFilter />
+      </GridToolbarContainer>
+
+        {/* <GridToolbarContainer sx={{display:"flex", justifyContent:"flex-end" }}>
+        </GridToolbarContainer> */}
+      </> 
+ 
+    );
+  }
   
   return (
     <DashboardLayout>
@@ -73,11 +92,11 @@ export const Usuarios = () => {
                   <div style={{display: "flex", height: "100%"}}>
                     <div style={{flexGrow: 1}}>
                      <DataGrid 
-                         sx={{fontSize: "small"}}
+                         sx={{fontSize: 14}}
                          rows={users} columns={columns}
                          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                         components={{Toolbar: GridToolbar}}
-                         componentsProps={{ toolbar: {showQuickFilter: true}}}
+                         components={{Toolbar: CustomToolbar}}
+                        //  componentsProps={ {toolbar: {showQuickFilter: true}}}
                          pageSize={5}
                          rowsPerPageOptions={[5]}
                      />   

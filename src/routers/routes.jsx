@@ -38,7 +38,7 @@ const routes = [
       name: "Funcionarios",
       key: "funcionarios",
       icon: <WorkIcon fontSize="small" />,
-      route: ""
+      route: "/funcionarios"
     },
     {
       name: "Tutores Academicos",
