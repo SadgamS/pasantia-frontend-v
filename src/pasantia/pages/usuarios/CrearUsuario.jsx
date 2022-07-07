@@ -79,11 +79,23 @@ export const CrearUsuario = () => {
       <Card
         sx={{
           position: "relative",
-          mt: 4,
-          mx: 3,
-          py: 2,
-          px: 2,
-          flexGrow: 1
+          mt: {
+            xs:3,
+            sm:4
+          },
+          mx: {
+            xs:0,
+            sm:2
+          },
+          py: {
+            xs: 1,
+            sm: 2
+          },
+          px: {
+            xs: 1,
+            sm: 2
+          },
+          flexGrow: 1,
         }}
       >
           <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>

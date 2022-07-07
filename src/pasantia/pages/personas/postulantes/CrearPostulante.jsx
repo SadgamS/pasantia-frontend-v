@@ -1,22 +1,24 @@
 import { Card, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import { Box } from "@mui/system"
 import DashboardLayout from "../../../../layouts/layoutContainers/DashboardLayout"
 import MDBox from "../../../../theme/components/MDBox"
 import MDTypography from "../../../../theme/components/MDTypography"
 
 export const CrearPostulante = () => {
   return (
-    <DashboardLayout>
-        
-        <Card
+    <DashboardLayout> 
+      <Grid container spacing={2} justifyContent="center" alignItems="center">
+        <Grid item xs={12} sm={11} md={11} lg={11} xl={10}>
+          <Card
             sx={{
-                position: "relative",
-                mt: 4,
-                mx: 3,
-                py: 2,
-                px: 2,
-                flexGrow: 1
-              }}
-        >
+              position: "relative",
+                mt: { xs:3,sm:4},
+                mx: { xs:0,sm:2, md:1, lg:2, xl:0},
+                py: { xs:2,sm:2, md:2, lg:3, xl:3},
+                px: { xs:2,sm:2, md:3, lg:4, xl:4},
+                flexGrow: 1,
+            }}
+          >
             <Grid container mt={1}>
               <Grid item>
                 <MDTypography variant='h5' fontWeight='bold'>
@@ -26,39 +28,55 @@ export const CrearPostulante = () => {
             </Grid>
             <Grid container mt={2}>
               <Grid item>
-                <MDTypography variant='subtitle2' fontWeight='regular'>
+                <MDTypography variant='subtitle2' fontWeight='regular' color='info'>
                   Datos Personales
                 </MDTypography>
               </Grid>
             </Grid>
             <MDBox component="form" role="form">
-              <Grid container mt={1} spacing={1}>
-                <Grid item  sm={3}>
-                  <TextField 
+              <Grid container mt={1} spacing={2} p={2}>
+                <Grid item xs={12} sm={6} md={6} lg={3}>
+                  <TextField
+                    variant='standard'
+                    InputLabelProps={{
+                      shrink: true,
+                    }} 
                     label='Primer nombre'
                     fullWidth
                   />
                 </Grid>
-                <Grid item  sm={3}>
-                  <TextField 
+                <Grid item xs={12} sm={6} md={6} lg={3}>
+                  <TextField
+                    variant='standard'
+                    InputLabelProps={{
+                      shrink: true,
+                    }} 
                     label='Segundo nombre'
                     fullWidth
                   />
                 </Grid>
-                <Grid item  sm={3}>
+                <Grid item xs={12} sm={6} md={6} lg={3}>
                   <TextField 
+                    variant='standard'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     label='Apellido paterno'
                     fullWidth
                   />
                 </Grid>
-                <Grid item  sm={3}>
+                <Grid item xs={12} sm={6} md={6} lg={3}>
                   <TextField
+                    variant='standard'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     label='Apellido materno'
                     fullWidth
                   />
                 </Grid>
               </Grid>
-              <Grid container mt={2} spacing={1}>
+              <Grid container mt={2} spacing={2}>
                 <Grid item sm={2}>
                     <TextField 
                         label='Carnet de identidad'
@@ -121,7 +139,13 @@ export const CrearPostulante = () => {
 
               </Grid>
             </MDBox>
+   
         </Card>
+
+            </Grid>
+          </Grid>
+        
+        
     </DashboardLayout>
   )
 }
