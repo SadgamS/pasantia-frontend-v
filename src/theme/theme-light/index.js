@@ -9,6 +9,8 @@ import autocomplete from "./components/autocomplete";
 import breadcrumbs from "./components/breadcrumbs";
 import card from "./components/card";
 import divider from "./components/divider";
+import formControlLabel from "./components/formControlLabel";
+import formLabel from "./components/formLabel";
 import input from "./components/input";
 import inputLabel from "./components/inputLabel";
 import inputOutlined from "./components/inputOutlined";
@@ -17,6 +19,7 @@ import listItem from "./components/listItem";
 import listItemText from "./components/listItemText";
 import menu from "./components/menu";
 import menuItem from "./components/menuItem";
+import radio from "./components/radio";
 import sidenav from "./components/sidenav";
 import tableContainer from "./components/tableContainer";
 import textField from "./components/textField";
@@ -61,6 +64,9 @@ export default createTheme({
         MuiOutlinedInput: { ...inputOutlined },
         MuiDataGrid: { ...tableContainer },
         MuiMenu: { ...menu },
-        MuiMenuItem: { ...menuItem }
+        MuiMenuItem: { ...menuItem },
+        MuiRadio: { ...radio },
+        MuiFormControlLabel: { ...formControlLabel },
+        MuiFormLabel: { ...formLabel }
     }
 })

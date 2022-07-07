@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from "react-hook-form";
 import { Box } from '@mui/system'
 import { Link, useNavigate } from 'react-router-dom'
+import { FormLayout } from '../../../layouts/FormLayout'
 
 export const CrearUsuario = () => {
   const [personas, setPersonas] = useState([]);
@@ -75,30 +76,8 @@ export const CrearUsuario = () => {
   const onSubmit = (data) => console.log(data)
   
   return (
-    <DashboardLayout>
-      <Card
-        sx={{
-          position: "relative",
-          mt: {
-            xs:3,
-            sm:4
-          },
-          mx: {
-            xs:0,
-            sm:2
-          },
-          py: {
-            xs: 1,
-            sm: 2
-          },
-          px: {
-            xs: 1,
-            sm: 2
-          },
-          flexGrow: 1,
-        }}
-      >
-          <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
+    <FormLayout>
+      <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3} alignItems="center" p={2}>
           <Grid item xs={12}>
             <MDTypography variant="h5" fontWeight="medium">
@@ -107,7 +86,7 @@ export const CrearUsuario = () => {
           </Grid>
           <Grid item container spacing={2} mt={1}>
 
-          <Grid item xs={12} sm={5} >
+          <Grid item xs={12} sm={5} md={5} >
             <Autocomplete 
               id='people'
               onChange={(e,newValue) => { 
@@ -127,7 +106,7 @@ export const CrearUsuario = () => {
               renderInput={(params) => <TextField {...params} variant="standard" label="Personas"/>}
               />
           </Grid>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={12} sm={2} md={2}>
               <Controller 
                 render={({field: {onChange}}) => (
                   <Autocomplete 
@@ -154,7 +133,7 @@ export const CrearUsuario = () => {
                 control={control}
               />
           </Grid>
-          <Grid item sm={5}>
+          <Grid item xs={12} sm={5} md={5}>
             {rol != null ? <Alert severity='info' sx={{fontSize: "small"}}>
                 { rol.descripcion }
             </Alert>: null}
@@ -162,7 +141,7 @@ export const CrearUsuario = () => {
           </Grid>
           <Grid item container mt={1} spacing={2}>
 
-          <Grid item xs={12} sm={5}>
+          <Grid item xs={12} sm={5} md={6}>
             <Controller 
               name="Usuario"
               control={control}
@@ -173,13 +152,15 @@ export const CrearUsuario = () => {
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}
-                  focused
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                 />
               )}
             />
           </Grid>
-          <Grid item xs={12} sm={5}>
+          <Grid item xs={12} sm={5} md={6}>
             <Controller 
               name="Contraseña"
               control={control}
@@ -190,9 +171,11 @@ export const CrearUsuario = () => {
                   onChange={onChange}  
                   value={value}
                   error={!!error}
-                  helperText={error ? error.message : null} 
+                  helperText={error ? error.message : null}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
-                  focused
                 />
               )}
             />
@@ -221,8 +204,7 @@ export const CrearUsuario = () => {
               Guardar
             </LoadingButton>
         </Stack>
-        </Box>
-      </Card>
-    </DashboardLayout>
+      </Box>
+    </FormLayout>
   )
 }
