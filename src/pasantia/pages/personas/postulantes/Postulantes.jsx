@@ -46,18 +46,19 @@ export const Postulantes = () => {
   }
   
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60 },
-    { field: 'nombres', headerName: 'Nombres', valueGetter: getNombres, width: 160},
-    { field: 'apellidos', headerName: 'Apellidos', valueGetter: getApellidos, width: 150},
-    { field: 'ci', headerName: 'C.I.', valueGetter: getCi, width: 140},
-    { field: 'carrera', headerName: 'Carrera', width: 120},
-    { field: 'universidad', headerName: 'Universidad', valueGetter: getUniversidad, width: 130},
-    { field: 'pasantia', headerName: 'Tipo Postulacion', valueGetter: getTipo, width: 130},
+    { field: 'id', hide:true},
+    { field: 'nombres', headerName: 'Nombres', valueGetter: getNombres, minWidth: 160, flex: 1},
+    { field: 'apellidos', headerName: 'Apellidos', valueGetter: getApellidos, minWidth: 150, flex: 1},
+    { field: 'ci', headerName: 'C.I.', valueGetter: getCi, minWidth: 140, flex: 1},
+    { field: 'carrera', headerName: 'Carrera', minWidth: 120, flex: 1},
+    { field: 'universidad', headerName: 'Universidad', valueGetter: getUniversidad, minWidth: 130, flex: 1},
+    { field: 'pasantia', headerName: 'Tipo Postulacion', valueGetter: getTipo, minWidth: 130, flex: 1},
     {
       field: 'actions',
       headerName: 'Acciones',
       type: 'actions',
-      width: 110,
+      minWidth: 120,
+      flex: 1,
       getActions: (params) =>[
           <GridActionsCellItem
             icon={<ContactPageIcon color="info" /> }

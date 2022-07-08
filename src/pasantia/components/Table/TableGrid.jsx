@@ -20,7 +20,16 @@ export const TableGrid = ({rows, columns, loading}) => {
         <div style={{display: 'flex', height: '100%'}}>
             <div style={{flexGrow: 1}}>
                 <DataGrid 
-                    sx={{fontSize: 14}}
+                    sx={{fontSize: 14,
+                        '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
+                          py: 1,
+                        },
+                        '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
+                          py: '13px',
+                        },
+                        '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': {
+                          py: '17px',
+                        },}}
                     rows={rows} 
                     columns={columns}
                     localeText={esES.components.MuiDataGrid.defaultProps.localeText}
@@ -29,6 +38,8 @@ export const TableGrid = ({rows, columns, loading}) => {
                     pagination
                     disableSelectionOnClick
                     getRowHeight={() => 'auto'}
+                    // getEstimatedRowHeight={() => 200}
+                    
                     loading={loading} 
                 />          
             </div>

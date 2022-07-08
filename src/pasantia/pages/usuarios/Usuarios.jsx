@@ -37,17 +37,18 @@ export const Usuarios = () => {
     return `${params.row.persona.primer_nombre} ${params.row.persona.apellido_paterno}`
   }
    const columns = [
-    { field: 'id', headerName: 'ID', width: 60 },
-    { field: 'usuario', headerName: 'Usuario', width: 150 },
-    { field: 'ultimo_ingreso', headerName: 'Ultimo ingreso', type:'dateTime', width: 230 },
-    { field: 'created_at', headerName: 'Creado en', type:'dateTime' ,width: 180 },
-    { field: 'rol', headerName: 'Rol' ,width: 110, valueGetter: getRol },
-    { field: 'persona', headerName: 'Persona' ,width: 150, valueGetter: getPersona },
+    { field: 'id', hide:true },
+    { field: 'usuario', headerName: 'Usuario', minWidth: 150, flex: 1 },
+    { field: 'ultimo_ingreso', headerName: 'Ultimo ingreso', type:'dateTime', minWidth: 170, flex: 1},
+    { field: 'created_at', headerName: 'Creado en', type:'dateTime' ,minWidth: 180, flex: 1 },
+    { field: 'rol', headerName: 'Rol' ,minWidth: 110, flex: 1, valueGetter: getRol },
+    { field: 'persona', headerName: 'Persona' ,minWidth: 150, flex: 1, valueGetter: getPersona },
     {
       field: 'actions',
       headerName: 'Acciones',
       type: 'actions',
-      width: 110,
+      minWidth: 120,
+      flex: 1,
       getActions: (params) =>[
           <GridActionsCellItem
             icon={<ContactPageIcon color="info" /> }

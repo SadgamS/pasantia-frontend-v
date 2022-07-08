@@ -22,7 +22,18 @@ import DashboardLayout from '../../../../layouts/layoutContainers/DashboardLayou
 import MDBox from '../../../../theme/components/MDBox';
 import MDTypography from '../../../../theme/components/MDTypography';
 
+import FileUpload from "react-mui-fileuploader"
+
 export const CrearPostulante = () => {
+  const handleFileUploadError = (error) => {
+    // Do something...
+    console.log(error)
+  }
+  
+  const handleFilesChange = (files) => {
+    // Do something...
+    console.log(files)
+  }
   return (
     <FormLayout>
       <Grid container mt={1}>
@@ -226,6 +237,26 @@ export const CrearPostulante = () => {
           />
         </Grid>
       </Grid>
+      <FileUpload
+      multiFile={true}
+      disabled={false}
+      title="My awesome file uploader"
+      header="[Drag to drop]"
+      leftLabel="or"
+      rightLabel="to select files"
+      buttonLabel="click here"
+      buttonRemoveLabel="Remove all"
+      maxFileSize={1}
+      maxUploadFiles={1}
+      maxFilesContainerHeight={357}
+      errorSizeMessage={'fill it or move it to use the default error message'}
+      allowedExtensions={['jpg', 'jpeg', 'pdf']}
+      onFilesChange={handleFilesChange}
+      onError={handleFileUploadError}
+      
+      bannerProps={{ elevation: 0, variant: "outlined" }}
+      containerProps={{ elevation: 0, variant: "outlined" }}
+    />
       <Stack
           direction="row"
           justifyContent="flex-end"
