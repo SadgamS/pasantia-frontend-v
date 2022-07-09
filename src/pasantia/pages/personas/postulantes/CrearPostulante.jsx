@@ -2,9 +2,9 @@ import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
   Button,
-  Card,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   Grid,
   InputLabel,
@@ -18,22 +18,37 @@ import {
 import { Link } from 'react-router-dom';
 import SaveIcon from '@mui/icons-material/Save';
 import { FormLayout } from '../../../../layouts/FormLayout';
-import DashboardLayout from '../../../../layouts/layoutContainers/DashboardLayout';
 import MDBox from '../../../../theme/components/MDBox';
 import MDTypography from '../../../../theme/components/MDTypography';
 
-import FileUpload from "react-mui-fileuploader"
+import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from "react-hook-form";
 
 export const CrearPostulante = () => {
-  const handleFileUploadError = (error) => {
-    // Do something...
-    console.log(error)
-  }
-  
-  const handleFilesChange = (files) => {
-    // Do something...
-    console.log(files)
-  }
+
+  const schema = yup.object({
+    nombres: yup.string().required("Ingresa un nombre").matches(/^[a-zA-Z ]*$/,"Solo puede introducir letras"),
+    primer_apellido: yup.string().required("Ingresa un apellido").matches(/^[a-zA-Z ]*$/,"Solo puede introducir letras"),
+    segundo_apellido: yup.string().matches(/^[a-zA-Z ]*$/,"Solo puede introducir letras"),
+    ci: yup.string().required("Ingresa un carnet de identidad").min(5,"Minimo 5 caracteres"),
+    extension: yup.string().required("Selecciona un departamento"),
+    fecha_nacimiento: yup.date().max(new Date(),"asd"),
+  }).required()
+
+  const { control, handleSubmit, formState: {errors}} = useForm({
+    mode: "onChange",
+    defaultValues:{
+      nombres: '',
+      primer_apellido: '',
+      segundo_apellido: '',
+      ci: '',
+      extension: '',
+      fecha_nacimiento: ''
+    },
+    resolver: yupResolver(schema)
+  });
+  const onSubmit = data => console.log(data)
   return (
     <FormLayout>
       <Grid container mt={1}>
@@ -50,80 +65,142 @@ export const CrearPostulante = () => {
           </MDTypography>
         </Grid>
       </Grid>
-      <MDBox component="form" role="form">
-        <Grid container mt={0} spacing={2} p={2}>
-          <Grid item xs={12} sm={6} md={6} lg={3}>
-            <TextField
-              variant="standard"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              label="Primer nombre"
-              fullWidth
+      <MDBox component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
+        <Grid container mt={0} spacing={2} p={1}>
+          <Grid item xs={12} sm={6} md={4} lg={4}>
+            <Controller 
+              name="nombres"
+              control={control}
+              render={({field: {onChange, value}, formState:{error}}) => (
+                <TextField
+                  onChange={onChange}
+                  value={value}
+                  variant="standard"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Nombres"
+                  autoComplete="off"
+                  fullWidth
+                />
+              )}
+            />
+            
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={4}>
+            <Controller 
+              name="primer_apellido"
+              control={control}
+              render={({field: {onChange, value}, fieldState: {error}}) => (
+                <TextField
+                  onChange={onChange}
+                  value={value}
+                  variant="standard"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Primer apellido"
+                  autoComplete="off"
+                  fullWidth
+                />
+              )}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={3}>
-            <TextField
-              variant="standard"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              label="Segundo nombre"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={3}>
-            <TextField
-              variant="standard"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              label="Apellido paterno"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={3}>
-            <TextField
-              variant="standard"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              label="Apellido materno"
-              fullWidth
+          <Grid item xs={12} sm={6} md={4} lg={4}>
+          <Controller 
+              name="segundo_apellido"
+              control={control}
+              render={({field: {onChange, value}, fieldState: {error}}) => (
+                <TextField
+                  onChange={onChange}
+                  value={value}
+                  variant="standard"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Segundo apellido"
+                  autoComplete="off"
+                  fullWidth
+                />
+              )}
             />
           </Grid>
         </Grid>
         <Grid container mt={0} spacing={2} p={1}>
           <Grid item xs={8} sm={7} md={5} lg={3}>
-            <TextField
-              variant="standard" 
-              label="Carnet de identidad"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              fullWidth 
+            <Controller 
+              name="ci"
+              control={control}
+              render={({field: {onChange, value}, fieldState: {error}}) => (
+                <TextField
+                  onChange={onChange}
+                  value={value}
+                  variant="standard"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  label="Carnet de identidad"
+                  autoComplete="off"
+                  fullWidth
+                />
+              )}
             />
           </Grid>
           <Grid item xs={4} sm={5} md={3} lg={2}>
-            <FormControl  fullWidth>
+            <FormControl variant="standard" fullWidth error={!!errors.extension}>
               <InputLabel id="ext">Extensión</InputLabel>
-              <Select   labelId="ext" label="Extension">
-                <MenuItem >La Paz</MenuItem>
-                <MenuItem >Santa Cruz</MenuItem>
-                <MenuItem >PTS</MenuItem>
+            <Controller 
+              name="extension"
+              control={control}
+              render={({field:{onChange, value}})=>(
+              <Select
+                onChange={onChange}
+                value={value} 
+                labelId="ext" 
+                label="Extension"
+              >
+                <MenuItem value={"La Paz"}>La Paz</MenuItem>
+                <MenuItem value={"Santa Cruz"}>Santa Cruz</MenuItem>
+                <MenuItem value={"Oruro"}>Oruro</MenuItem>
+                <MenuItem value={"Cochabamba"}>Cochabamba</MenuItem>
+                <MenuItem value={"Pando"}>Pando</MenuItem>
+                <MenuItem value={"Potosi"}>Potosi</MenuItem>
+                <MenuItem value={"Tarija"}>Tarija</MenuItem>
+                <MenuItem value={"Sucre"}>Sucre</MenuItem>
+                <MenuItem value={"Beni"}>Beni</MenuItem>
               </Select>
-            </FormControl>
+              )}
+              />
+              <FormHelperText>{errors.extension ? errors.extension.message : null}</FormHelperText>
+              </FormControl>
           </Grid>
           <Grid item xs={5} sm={5} md={4} lg={3}>
-            <TextField
-              variant="standard" 
-              label="Fecha de nacimiento"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              fullWidth
+            <Controller 
+              name="fecha_nacimiento"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <TextField
+                  onChange={onChange}
+                  value={value}
+                  variant="standard" 
+                  label="Fecha de nacimiento"
+                  type="date"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  fullWidth
+                />
+              )}
             />
+
           </Grid>
           <Grid item xs={7} sm={7} md={5} lg={4} sx={{mt:{ xs:-1, sm:-1, md:-1, lg:-2}}}>
             <FormControl fullWidth>
@@ -136,7 +213,27 @@ export const CrearPostulante = () => {
           </Grid>
         </Grid>
       <Grid container mt={0} spacing={2} p={1} >
-        <Grid item xs={6} sm={7} md={6} lg={4}>
+        <Grid item xs={12} sm={7} md={6} lg={5}>
+          <TextField
+            variant="standard"
+            label="Domicilio"
+            InputLabelProps={{
+                shrink: true,
+              }}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={5} md={2} lg={3}>
+          <TextField
+            variant="standard"
+            label="Ciudad"
+            InputLabelProps={{
+                shrink: true,
+              }}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={4}>
           <TextField
             variant="standard"
             type="email"
@@ -144,10 +241,12 @@ export const CrearPostulante = () => {
             InputLabelProps={{
                 shrink: true,
               }}
-            fullWidth
-          />
+              fullWidth
+              />
         </Grid>
-        <Grid item xs={5} sm={5} md={5} lg={3}>
+      </Grid>
+      <Grid container mt={0} spacing={2} p={1}>
+        <Grid item xs={12} sm={4} md={3} lg={3}>
           <TextField
             variant="standard" 
             label="Celular"
@@ -157,7 +256,17 @@ export const CrearPostulante = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={5} sm={5} md={5} lg={3}>
+        <Grid item xs={12} sm={8} md={6} lg={6}>
+          <TextField
+            variant="standard" 
+            label="Nombre de un familiar de referencia"
+            InputLabelProps={{
+                shrink: true,
+              }}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={5} md={3} lg={3}>
           <TextField
             variant="standard" 
             label="Celular de referencia"
@@ -237,26 +346,6 @@ export const CrearPostulante = () => {
           />
         </Grid>
       </Grid>
-      <FileUpload
-      multiFile={true}
-      disabled={false}
-      title="My awesome file uploader"
-      header="[Drag to drop]"
-      leftLabel="or"
-      rightLabel="to select files"
-      buttonLabel="click here"
-      buttonRemoveLabel="Remove all"
-      maxFileSize={1}
-      maxUploadFiles={1}
-      maxFilesContainerHeight={357}
-      errorSizeMessage={'fill it or move it to use the default error message'}
-      allowedExtensions={['jpg', 'jpeg', 'pdf']}
-      onFilesChange={handleFilesChange}
-      onError={handleFileUploadError}
-      
-      bannerProps={{ elevation: 0, variant: "outlined" }}
-      containerProps={{ elevation: 0, variant: "outlined" }}
-    />
       <Stack
           direction="row"
           justifyContent="flex-end"
