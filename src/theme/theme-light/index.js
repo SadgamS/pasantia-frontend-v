@@ -30,7 +30,6 @@ import linearGradient from "./functions/linearGradient";
 import pxToRem from "./functions/pxToRem";
 import rgba from "./functions/rgba";
 
-
 export default createTheme({
     breakpoints: {...breakpoints},
     palette: {...colors},
@@ -68,5 +67,5 @@ export default createTheme({
         MuiRadio: { ...radio },
         MuiFormControlLabel: { ...formControlLabel },
         MuiFormLabel: { ...formLabel }
-    }
+    },
 })
