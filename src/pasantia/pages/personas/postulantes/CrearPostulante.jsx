@@ -31,7 +31,42 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from "react-hook-form";
 import moment from "moment";
+import { useEffect, useState } from 'react';
+import apiClient from '../../../../services/api';
+
 export const CrearPostulante = () => {
+  const [univeridades, setUniveridades] = useState([]);
+  // const [loadingConv, setLoadingConv] = useState(true)
+  const [modalidad, setModalidad] = useState('');
+  const [convocatorias, setConvocatorias] = useState([])
+  const loadingUni = univeridades.length === 0 
+  useEffect(() => {
+    if (loadingUni) {
+      
+      (async () => {
+      const response = await apiClient.get('/api/universidades');
+      if (response.status === 200) {
+        setUniveridades([...response.data])
+      }
+    })();
+    };
+  }, [loadingUni])
+
+  useEffect(() => {
+    if (modalidad != '') {
+      (async ()  => {
+        try{
+          const response = await apiClient.get(`api/convocatorias/${modalidad}`);
+          if (response.status === 200) {
+            setConvocatorias(response.data);
+          }
+        } catch(error){
+
+        }
+      })();
+    }
+  }, [modalidad])
+
   const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]*$/g;
 
   const schema = yup.object({
@@ -50,6 +85,11 @@ export const CrearPostulante = () => {
     celular: yup.string().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
     nombre_referencia: yup.string().required("Ingresa un nombre de refrencia").matches(regex, "Solo puede introducir letras"),
     celular_referencia: yup.string().nullable().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
+    tipo_postulante: yup.string().required("Seleccione un tipo de postulante"),
+    universidad: yup.object().required("Seleccione una universidad"),
+    carrera: yup.string().required("Ingrese una carrera").matches(regex, "Solo puede introducir letras"),
+    numero_anios_semestres: yup.string().required("Seleccione un año"),
+    convocatoria: yup.object().required("Seleccione una convocatoria")
   }).required()
 
   const { control, handleSubmit, formState: {errors}, setValue} = useForm({
@@ -68,7 +108,9 @@ export const CrearPostulante = () => {
       celular: '',
       nombre_referencia: '',
       celular_referencia: '',
-      tipo_postulante: ''
+      tipo_postulante: '',
+      carrera: '',
+      numero_anios_semestres: '',
       
     },
     resolver: yupResolver(schema)
@@ -406,7 +448,7 @@ export const CrearPostulante = () => {
       </Grid>
       <Grid container mt={0} spacing={2} p={2}>
         <Grid item xs={12} sm={8} md={5} lg={4} >
-          <FormControl fullWidth>
+          <FormControl error={!!errors.tipo_postulante} fullWidth>
             <Controller 
               name="tipo_postulante"
               control={control}
@@ -422,36 +464,78 @@ export const CrearPostulante = () => {
               </RadioGroup>
               )}
             />
+          <FormHelperText>{errors.tipo_postulante ? errors.tipo_postulante.message : null}</FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={12} md={7} lg={4}>
-          <Autocomplete 
-            renderInput={(params) => <TextField {...params} label="Universidad" variant="standard" />}
+          <Controller 
+            name="universidad"
+            control={control}
+            render={({field: {onChange, onBlur}})=>(
+              <Autocomplete
+                // value={value}  
+                onChange={(_,data)=>onChange(data)}
+                onBlur={onBlur}
+                options={univeridades}
+                loading={loadingUni}
+                getOptionLabel={(option) => option.nombre}
+                isOptionEqualToValue={(option, value) => option.nombre === value.nombre}
+                renderInput={(params) => 
+                  <TextField {...params} 
+                    label="Universidad" 
+                    error={!!errors.universidad} 
+                    helperText={ errors.universidad ? errors.universidad.message : null} 
+                    variant="standard"
+                  />}
+              />
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={7} lg={4}>
-          <TextField
-            variant="standard" 
-            label="Carrera"
-            InputLabelProps={{
-                shrink: true,
-              }}
-            fullWidth
+          <Controller 
+            name="carrera"
+            control={control}
+            render={({field: {onChange, value, onBlur}, fieldState: {error}})=>(
+              <TextField
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+                error={!!error}
+                helperText={error ? error.message : null}
+                variant="standard" 
+                label="Carrera"
+                InputLabelProps={{
+                    shrink: true,
+                  }}
+                fullWidth
+                autoComplete='off'
+              />
+            )}
           />
         </Grid>
       </Grid>
       <Grid container mt={0} spacing={2} p={2}>
         <Grid item xs={12} sm={12} md={6} lg={4}>
-          <FormControl  fullWidth>
-            <InputLabel id="ext">Numero de años o semestres</InputLabel>
-            <Select labelId="ext" label="Numero de años o semestres">
-              <MenuItem >8vo semestre</MenuItem>
-              <MenuItem >Finalizado</MenuItem>
-            </Select>
+          <FormControl error={!!errors.numero_anios_semestres} variant="standard" fullWidth>
+            <InputLabel id="num">Numero de años o semestres</InputLabel>
+            <Controller 
+              name="numero_anios_semestres"
+              control={control}
+              render={({field: {onChange, value, onBlur}})=>(
+                <Select
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  labelId="num" 
+                  label="Numero de años o semestres">
+                  <MenuItem value="4to año">4to año</MenuItem>
+                  <MenuItem value="5to año">5to año</MenuItem>
+                  <MenuItem value="Finalizado">Finalizado</MenuItem>
+                </Select>
+              )}
+            />
+            <FormHelperText>{errors.numero_anios_semestres ? errors.numero_anios_semestres.message : null}</FormHelperText>
           </FormControl>
-        </Grid>
-        <Grid item>
-            <TextField type="file " label="doc"/>
         </Grid>
       </Grid>
       <Grid container mt={1}>
@@ -463,18 +547,38 @@ export const CrearPostulante = () => {
       </Grid>
       <Grid container mt={0} spacing={2} p={2}>
         <Grid item xs={12 } sm={5} md={4} lg={4}>
-          <FormControl  fullWidth>
-            <InputLabel id="ext">Modalidad</InputLabel>
-            <Select   labelId="ext" label="Extension">
-              <MenuItem >Pasantia</MenuItem>
-              <MenuItem >Trabajo dirigido</MenuItem>
-            </Select>
+          <FormControl variant="standard" fullWidth>
+            <InputLabel id="mod">Modalidad</InputLabel>
+                <Select
+                  value={modalidad}
+                  onChange={(e => setModalidad(e.target.value))}
+                  labelId="mod" 
+                  label="Extension">
+                  <MenuItem value="pasantia">Pasantia</MenuItem>
+                  <MenuItem value="trabajo dirigido">Trabajo dirigido</MenuItem>
+                </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12 } sm={7} md={8} lg={8}>
-          <Autocomplete 
-            renderInput={(params) => <TextField {...params} label="Convocatorias de pasantia o trabajo dirigido" variant="standard" />}
-          />
+        <Controller 
+            name="convocatoria"
+            control={control}
+            render={({field: {onChange, onBlur}})=>(
+              <Autocomplete
+                onChange={(_,data)=>onChange(data)}
+                onBlur={onBlur}
+                options={convocatorias}
+                getOptionLabel={(option) => option.nombre_ref}
+                isOptionEqualToValue={(option, value) => option.nombre_ref === value.nombre_ref}
+                renderInput={(params) => <TextField 
+                    {...params} 
+                    error={!!errors.convocatoria} 
+                    helperText={ errors.convocatoria ? errors.convocatoria.message : "Seleccione una modalidad para ver las convocatorias"}
+                    label="Convocatorias de pasantia o trabajo dirigido" 
+                    variant="standard" />}
+              />
+            )}
+        />
         </Grid>
       </Grid>
       <Stack
