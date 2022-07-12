@@ -46,7 +46,7 @@ export const Postulantes = () => {
   }
   
   const columns = [
-    { field: 'id', hide:true},
+    // { field: 'id', hide:true},
     { field: 'nombres', headerName: 'Nombres', valueGetter: getNombres, minWidth: 160, flex: 1},
     { field: 'apellidos', headerName: 'Apellidos', valueGetter: getApellidos, minWidth: 150, flex: 1},
     { field: 'ci', headerName: 'C.I.', valueGetter: getCi, minWidth: 140, flex: 1},
@@ -75,7 +75,6 @@ export const Postulantes = () => {
       ],
     }
   ];
-
 
   return (
     <DashboardLayout>

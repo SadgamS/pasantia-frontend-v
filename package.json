@@ -25,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.31.3",
     "react-router-dom": "^6.3.0",
+    "sweetalert2": "^11.4.20",
     "yup": "^0.32.11"
   },
   "devDependencies": {

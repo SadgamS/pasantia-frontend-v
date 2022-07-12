@@ -1,8 +1,8 @@
 import { LoadingButton } from '@mui/lab';
 import {
-  Alert,
   Autocomplete,
   Button,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -13,18 +13,18 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Snackbar,
   Stack,
   TextField,
+  Typography,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { esES } from '@mui/material/locale';
 import {es} from 'date-fns/locale'
 
 import { Link, useNavigate } from 'react-router-dom';
 import SaveIcon from '@mui/icons-material/Save';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { FormLayout } from '../../../../layouts/FormLayout';
 import MDBox from '../../../../theme/components/MDBox';
 import MDTypography from '../../../../theme/components/MDTypography';
@@ -35,18 +35,28 @@ import { useForm, Controller } from "react-hook-form";
 import moment from "moment";
 import { useEffect, useState } from 'react';
 import apiClient from '../../../../services/api';
-import axios from 'axios';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.css';
 
 export const CrearPostulante = () => {
   const [univeridades, setUniveridades] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalidad, setModalidad] = useState('');
   const [convocatorias, setConvocatorias] = useState([]);
-  const [alert, setAlert] = useState({success: false, error:false})
-  const loadingUni = univeridades.length === 0 
+  const [loadingConv, setLoadingConv] = useState(true);
+  const loadingUni = univeridades.length === 0;
+
+  const [nameFiles, setNameFiles] = useState({});
+
+  const handleNameFile = (e) =>{
+    setNameFiles({
+      ...nameFiles,
+      ciname: e.target.files[0].name
+    })
+  }
+
   useEffect(() => {
-    if (loadingUni) {
-      
+    if (loadingUni) {     
       (async () => {
       const response = await apiClient.get('/api/universidades');
       if (response.status === 200) {
@@ -63,9 +73,11 @@ export const CrearPostulante = () => {
           const response = await apiClient.get(`/api/convocatorias/${modalidad}`);
           if (response.status === 200) {
             setConvocatorias(response.data);
+            setLoadingConv(false);
           }
         } catch(error){
-
+          console.error(error);
+          setLoadingConv(true);
         }
       })();
     }
@@ -93,10 +105,20 @@ export const CrearPostulante = () => {
     universidad: yup.object().required("Seleccione una universidad"),
     carrera: yup.string().required("Ingrese una carrera").matches(regex, "Solo puede introducir letras"),
     numero_anios_semestres: yup.string().required("Seleccione un año"),
-    convocatoria: yup.object().required("Seleccione una convocatoria")
+    convocatoria: yup.object().required("Seleccione una convocatoria (primero eliga una modalidad)"),
+    doci: yup.mixed()
+    .test('required', "Seleccione su doc ci", (value) =>{
+      return value && value.length
+    } )
+    .test("fileSize", "No puede ser muy pesado", (value, context) => {
+      return value && value[0] && value[0].size <= 200000;
+    })
+    .test("type", "Solo documentos pdf", function (value) {
+      return value && value[0] && value[0].type === "application/pdf";
+    }),
   }).required()
 
-  const { control, handleSubmit, formState: {errors}, setValue} = useForm({
+  const { control, handleSubmit, formState: {errors}, register, getValues} = useForm({
     mode: "all",
     defaultValues:{
       nombres: '',
@@ -120,49 +142,51 @@ export const CrearPostulante = () => {
     resolver: yupResolver(schema)
   });
   let navigate = useNavigate();
+  const file = getValues("doci");
   const onSubmit = async (data) => {
-    setLoading(true)
-    try{
-      const response = await apiClient.post('/api/postulantes/crear',{
-        nombres: data.nombres,
-        primer_apellido: data.primer_apellido,
-        segundo_apellido: data.segundo_apellido,
-        ci: data.ci,
-        extension: data.extension,
-        fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
-        genero: data.genero,
-        domicilio: data.domicilio,
-        ciudad: data.ciudad,
-        correo: data.correo,
-        celular: Number(data.celular),
-        nombre_referencia: data.nombre_referencia,
-        numero_referencia: Number(data.celular_referencia),
-        tipo_postulante: data.tipo_postulante,
-        carrera: data.carrera,
-        numero_anios_semestre: data.numero_anios_semestres,
-        id_universidad: data.universidad.id,
-        id_pasantia: data.convocatoria.id
-      });
+    console.log(data)
+    // setLoading(true)
+    // try{
+    //   const response = await apiClient.post('/api/postulantes/crear',{
+    //     nombres: data.nombres,
+    //     primer_apellido: data.primer_apellido,
+    //     segundo_apellido: data.segundo_apellido,
+    //     ci: data.ci,
+    //     extension: data.extension,
+    //     fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
+    //     genero: data.genero,
+    //     domicilio: data.domicilio,
+    //     ciudad: data.ciudad,
+    //     correo: data.correo,
+    //     celular: Number(data.celular),
+    //     nombre_referencia: data.nombre_referencia,
+    //     numero_referencia: Number(data.celular_referencia),
+    //     tipo_postulante: data.tipo_postulante,
+    //     carrera: data.carrera,
+    //     numero_anios_semestre: data.numero_anios_semestres,
+    //     id_universidad: data.universidad.id,
+    //     id_pasantia: data.convocatoria.id
+    //   });
 
-      if (response.data.message === 'success') {
-        setLoading(false)
-        setAlert({
-          ...alert,
-          success: true
-        })
-
-        navigate('/postulantes')
-      }
-    } catch (error){
-      console.error(error)
-      setLoading(false)
-      setAlert({
-        ...alert,
-        error: true
-      })
-    }
+    //   if (response.data.message === 'success') {
+    //     setLoading(false)
+    //     Swal.fire({
+    //       title: 'Agregado con exito!',
+    //       text: 'Se agrego a un nuevo postulante',
+    //       icon: 'success'
+    //     });
+    //     navigate('/postulantes');
+    //   }
+    // } catch (error){
+    //   console.error(error)
+    //   setLoading(false)
+    //   Swal.fire({
+    //     title: 'Ocurrio un error al guardar',
+    //     text: 'Por favor intente nuevamente',
+    //     icon: 'error',
+    //   });
+    // }
   }
-  console.log(alert)
   return (
     <FormLayout>
       <Grid container mt={1}>
@@ -529,7 +553,6 @@ export const CrearPostulante = () => {
             control={control}
             render={({field: {onChange, onBlur}})=>(
               <Autocomplete
-                // value={value}  
                 onChange={(_,data)=>onChange(data)}
                 onBlur={onBlur}
                 options={univeridades}
@@ -623,6 +646,7 @@ export const CrearPostulante = () => {
               <Autocomplete
                 onChange={(_,data)=>onChange(data)}
                 onBlur={onBlur}
+                loading={loadingConv}
                 options={convocatorias}
                 getOptionLabel={(option) => option.nombre_ref}
                 isOptionEqualToValue={(option, value) => option.nombre_ref === value.nombre_ref}
@@ -631,17 +655,46 @@ export const CrearPostulante = () => {
                     error={!!errors.convocatoria} 
                     helperText={ errors.convocatoria ? errors.convocatoria.message : "Seleccione una modalidad para ver las convocatorias"}
                     label="Convocatorias de pasantia o trabajo dirigido" 
-                    variant="standard" />}
+                    variant="standard" 
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {loadingConv ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                    />}
               />
             )}
         />
+        </Grid>
+      </Grid>
+      <Grid container mt={1}>
+        <Grid item>
+          <MDTypography variant="subtitle2" fontWeight="regular" color="info">
+            Documentos
+          </MDTypography>
+        </Grid>
+      </Grid>
+      <Grid container mt={0} spacing={2} p={2}>
+        <Grid item>
+          <Button variant="outlined" onChange={handleNameFile} component="label" startIcon={<UploadFileIcon />}>
+            Carnet de identidad
+            <input  {...register("doci")}  hidden accept="application/pdf" type="file" />
+          </Button>
+          <MDTypography variant="subtitle2" fontWeight="regular">
+            {errors.doci ? errors.doci.message : nameFiles.ciname}
+            {/* {file[0].name ? file[0].name : null} */}
+          </MDTypography>
         </Grid>
       </Grid>
       <Stack
           direction="row"
           justifyContent="flex-end"
           alignItems="center"
-          spacing={2}
+          spacing={3}
           p={2}
           mt={2}
           >
@@ -651,7 +704,6 @@ export const CrearPostulante = () => {
               </Button> 
             </Link>
            <LoadingButton
-              // disabled={(Object.keys(errors).length!==0)}
               type="submit"
               color="info"
               variant="outlined"
@@ -661,11 +713,6 @@ export const CrearPostulante = () => {
               Guardar
             </LoadingButton>
         </Stack>
-        <Snackbar open={alert.success} autoHideDuration={6000} onClose={(e)=> setAlert({...alert, success: false})}>
-          <Alert severity="success" variant="filled" elevation={6} sx={{width: '100%'}} onClose={(e)=> setAlert({...alert, success: false})}>
-            Creado con exito!!!
-          </Alert>
-        </Snackbar>
       </MDBox>
     </FormLayout>
   );

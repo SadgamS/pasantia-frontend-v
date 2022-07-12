@@ -30,6 +30,8 @@ import linearGradient from "./functions/linearGradient";
 import pxToRem from "./functions/pxToRem";
 import rgba from "./functions/rgba";
 
+import { esES } from "@mui/material/locale";
+
 export default createTheme({
     breakpoints: {...breakpoints},
     palette: {...colors},
@@ -68,4 +70,6 @@ export default createTheme({
         MuiFormControlLabel: { ...formControlLabel },
         MuiFormLabel: { ...formLabel }
     },
-})
+    },
+    esES,
+);
