@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import {
+  Alert,
   Autocomplete,
   Button,
   FormControl,
@@ -12,6 +13,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Snackbar,
   Stack,
   TextField,
 } from '@mui/material';
@@ -21,7 +23,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { esES } from '@mui/material/locale';
 import {es} from 'date-fns/locale'
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SaveIcon from '@mui/icons-material/Save';
 import { FormLayout } from '../../../../layouts/FormLayout';
 import MDBox from '../../../../theme/components/MDBox';
@@ -33,12 +35,14 @@ import { useForm, Controller } from "react-hook-form";
 import moment from "moment";
 import { useEffect, useState } from 'react';
 import apiClient from '../../../../services/api';
+import axios from 'axios';
 
 export const CrearPostulante = () => {
   const [univeridades, setUniveridades] = useState([]);
-  // const [loadingConv, setLoadingConv] = useState(true)
+  const [loading, setLoading] = useState(false);
   const [modalidad, setModalidad] = useState('');
-  const [convocatorias, setConvocatorias] = useState([])
+  const [convocatorias, setConvocatorias] = useState([]);
+  const [alert, setAlert] = useState({success: false, error:false})
   const loadingUni = univeridades.length === 0 
   useEffect(() => {
     if (loadingUni) {
@@ -56,7 +60,7 @@ export const CrearPostulante = () => {
     if (modalidad != '') {
       (async ()  => {
         try{
-          const response = await apiClient.get(`api/convocatorias/${modalidad}`);
+          const response = await apiClient.get(`/api/convocatorias/${modalidad}`);
           if (response.status === 200) {
             setConvocatorias(response.data);
           }
@@ -115,7 +119,50 @@ export const CrearPostulante = () => {
     },
     resolver: yupResolver(schema)
   });
-  const onSubmit = data => console.log(data, moment(data.fecha_nacimiento).format("YYYY-MM-DD"))
+  let navigate = useNavigate();
+  const onSubmit = async (data) => {
+    setLoading(true)
+    try{
+      const response = await apiClient.post('/api/postulantes/crear',{
+        nombres: data.nombres,
+        primer_apellido: data.primer_apellido,
+        segundo_apellido: data.segundo_apellido,
+        ci: data.ci,
+        extension: data.extension,
+        fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
+        genero: data.genero,
+        domicilio: data.domicilio,
+        ciudad: data.ciudad,
+        correo: data.correo,
+        celular: Number(data.celular),
+        nombre_referencia: data.nombre_referencia,
+        numero_referencia: Number(data.celular_referencia),
+        tipo_postulante: data.tipo_postulante,
+        carrera: data.carrera,
+        numero_anios_semestre: data.numero_anios_semestres,
+        id_universidad: data.universidad.id,
+        id_pasantia: data.convocatoria.id
+      });
+
+      if (response.data.message === 'success') {
+        setLoading(false)
+        setAlert({
+          ...alert,
+          success: true
+        })
+
+        navigate('/postulantes')
+      }
+    } catch (error){
+      console.error(error)
+      setLoading(false)
+      setAlert({
+        ...alert,
+        error: true
+      })
+    }
+  }
+  console.log(alert)
   return (
     <FormLayout>
       <Grid container mt={1}>
@@ -203,7 +250,7 @@ export const CrearPostulante = () => {
           </Grid>
         </Grid>
         <Grid container mt={0} spacing={2} p={1}>
-          <Grid item xs={8} sm={7} md={5} lg={3}>
+          <Grid item xs={6} sm={7} md={5} lg={3}>
             <Controller 
               name="ci"
               control={control}
@@ -225,7 +272,7 @@ export const CrearPostulante = () => {
               )}
             />
           </Grid>
-          <Grid item xs={4} sm={5} md={3} lg={2}>
+          <Grid item xs={6} sm={5} md={3} lg={2}>
             <FormControl variant="standard" fullWidth error={!!errors.extension}>
               <InputLabel id="ext">Extensión</InputLabel>
             <Controller 
@@ -254,7 +301,7 @@ export const CrearPostulante = () => {
               <FormHelperText>{errors.extension ? errors.extension.message : null}</FormHelperText>
               </FormControl>
           </Grid>
-          <Grid item xs={5} sm={5} md={4} lg={3}>
+          <Grid item xs={8} sm={5} md={4} lg={3}>
           <LocalizationProvider adapterLocale={es}  dateAdapter={AdapterDateFns}>
             <Controller 
               name="fecha_nacimiento"
@@ -267,7 +314,16 @@ export const CrearPostulante = () => {
                   maxDate={new Date().setFullYear(new Date().getFullYear()+1)}
                   label="Fecha de nacimiento"
                   views={['day', 'month', 'year']}
-                  renderInput={(params) => <TextField {...params} onBlur={onBlur} error={!!error} helperText={error ? error.message : null} InputLabelProps={{shrink:true}} variant="standard" autoComplete="off"/>}
+                  renderInput={(params) => 
+                      <TextField {...params} 
+                      onBlur={onBlur} 
+                      error={!!error} 
+                      helperText={error ? error.message : null} 
+                      InputLabelProps={{shrink:true}} 
+                      variant="standard"
+                      fullWidth 
+                      autoComplete="off"
+                    />}
                 />
               )}
             />
@@ -275,7 +331,7 @@ export const CrearPostulante = () => {
             </LocalizationProvider>
 
           </Grid>
-          <Grid item xs={7} sm={7} md={5} lg={4} sx={{mt:{ xs:-1, sm:-1, md:-1, lg:-2}}}>
+          <Grid item xs={12} sm={7} md={5} lg={4} sx={{mt:{ xs:-1, sm:-1, md:-1, lg:-2}}}>
             <FormControl error={!!errors.genero} fullWidth>
               <FormLabel id="row-label" > Genero </FormLabel>
               <Controller 
@@ -589,7 +645,7 @@ export const CrearPostulante = () => {
           p={2}
           mt={2}
           >
-            <Link to="/usuarios">
+            <Link to="/postulantes">
               <Button>
                 Cancelar
               </Button> 
@@ -599,11 +655,17 @@ export const CrearPostulante = () => {
               type="submit"
               color="info"
               variant="outlined"
+              loading={loading}
               startIcon={<SaveIcon />}
               >
               Guardar
             </LoadingButton>
         </Stack>
+        <Snackbar open={alert.success} autoHideDuration={6000} onClose={(e)=> setAlert({...alert, success: false})}>
+          <Alert severity="success" variant="filled" elevation={6} sx={{width: '100%'}} onClose={(e)=> setAlert({...alert, success: false})}>
+            Creado con exito!!!
+          </Alert>
+        </Snackbar>
       </MDBox>
     </FormLayout>
   );

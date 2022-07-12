@@ -27,11 +27,11 @@ export const Postulantes = () => {
   }, [])
   console.log(postulantes)
   const getNombres = (params) => {
-    return `${params.row.persona.primer_nombre} ${params.row.persona.segundo_nombre}`
+    return `${params.row.persona.nombres}`
   }
 
   const getApellidos = (params) => {
-    return `${params.row.persona.apellido_paterno} ${params.row.persona.apellido_materno}`
+    return `${params.row.persona.primer_apellido} ${params.row.persona.segundo_apellido}`
   }
   const getUniversidad = (params) => {
     return `${params.row.universidad.nombre}`
