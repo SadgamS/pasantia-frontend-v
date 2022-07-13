@@ -25,6 +25,7 @@ import {es} from 'date-fns/locale'
 import { Link, useNavigate } from 'react-router-dom';
 import SaveIcon from '@mui/icons-material/Save';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { FormLayout } from '../../../../layouts/FormLayout';
 import MDBox from '../../../../theme/components/MDBox';
 import MDTypography from '../../../../theme/components/MDTypography';
@@ -37,6 +38,7 @@ import { useEffect, useState } from 'react';
 import apiClient from '../../../../services/api';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
+import { Box } from '@mui/system';
 
 export const CrearPostulante = () => {
   const [univeridades, setUniveridades] = useState([]);
@@ -45,15 +47,6 @@ export const CrearPostulante = () => {
   const [convocatorias, setConvocatorias] = useState([]);
   const [loadingConv, setLoadingConv] = useState(true);
   const loadingUni = univeridades.length === 0;
-
-  const [nameFiles, setNameFiles] = useState({});
-
-  const handleNameFile = (e) =>{
-    setNameFiles({
-      ...nameFiles,
-      ciname: e.target.files[0].name
-    })
-  }
 
   useEffect(() => {
     if (loadingUni) {     
@@ -86,39 +79,56 @@ export const CrearPostulante = () => {
   const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]*$/g;
 
   const schema = yup.object({
-    nombres: yup.string().required("Ingresa un nombre").matches(regex,"Solo puede introducir letras"),
-    primer_apellido: yup.string().required("Ingresa un apellido").matches(regex,"Solo puede introducir letras"),
-    segundo_apellido: yup.string().matches(regex,"Solo puede introducir letras"),
-    ci: yup.string().required("Ingresa un carnet de identidad").min(5,"Minimo 5 caracteres"),
-    extension: yup.string().required("Selecciona un departamento"),
-    fecha_nacimiento: yup.date().nullable().required("Ingrese una fecha de nacimiento").typeError("Ingresa una fecha valida (dia/mes/año)").min(new Date("1990-01-01"), "Ingresa una fecha valida").test("fecha_nacimiento", "Tine que ser una persona mayor de 18 años", function (value) {
-      return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
+    // nombres: yup.string().required("Ingresa un nombre").matches(regex,"Solo puede introducir letras"),
+    // primer_apellido: yup.string().required("Ingresa un apellido").matches(regex,"Solo puede introducir letras"),
+    // segundo_apellido: yup.string().matches(regex,"Solo puede introducir letras"),
+    // ci: yup.string().required("Ingresa un carnet de identidad").min(5,"Minimo 5 caracteres"),
+    // extension: yup.string().required("Selecciona un departamento"),
+    // fecha_nacimiento: yup.date().nullable().required("Ingrese una fecha de nacimiento").typeError("Ingresa una fecha valida (dia/mes/año)").min(new Date("1990-01-01"), "Ingresa una fecha valida").test("fecha_nacimiento", "Tine que ser una persona mayor de 18 años", function (value) {
+    //   return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
+    // }),
+    // genero: yup.string().required("Seleccione un genero"),
+    // domicilio: yup.string().required("Ingrese su domicilio"),
+    // ciudad: yup.string().required("Ingrese ciudad de residencia").matches(regex,"Solo puede introducir letras"),
+    // correo: yup.string().email("Ingrese un correo valido"),
+    // celular: yup.string().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
+    // nombre_referencia: yup.string().required("Ingresa un nombre de refrencia").matches(regex, "Solo puede introducir letras"),
+    // celular_referencia: yup.string().nullable().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
+    // tipo_postulante: yup.string().required("Seleccione un tipo de postulante"),
+    // universidad: yup.object().required("Seleccione una universidad"),
+    // carrera: yup.string().required("Ingrese una carrera").matches(regex, "Solo puede introducir letras"),
+    // numero_anios_semestres: yup.string().required("Seleccione un año"),
+    // convocatoria: yup.object().required("Seleccione una convocatoria (primero eliga una modalidad)"),
+    doc_ci: yup.mixed().required("Es necesario el en formato PDF")
+                .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+                  return value && value[0] && value[0].size <= 5000000;
+                })
+                .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+                  return value && value[0] && value[0].type === "application/pdf";
+                }),
+    doc_matricula: yup.mixed().when('tipo_postulante',{
+      is: (val) => val === "Estudiante",
+      then: (schema) => schema.required("Es necesario la matricula en formato PDF")
+      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+        return value && value[0] && value[0].size <= 5000000;
+      })
+      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+        return value && value[0] && value[0].type === "application/pdf";
+      }),
     }),
-    genero: yup.string().required("Seleccione un genero"),
-    domicilio: yup.string().required("Ingrese su domicilio"),
-    ciudad: yup.string().required("Ingrese ciudad de residencia").matches(regex,"Solo puede introducir letras"),
-    correo: yup.string().email("Ingrese un correo valido"),
-    celular: yup.string().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
-    nombre_referencia: yup.string().required("Ingresa un nombre de refrencia").matches(regex, "Solo puede introducir letras"),
-    celular_referencia: yup.string().nullable().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
-    tipo_postulante: yup.string().required("Seleccione un tipo de postulante"),
-    universidad: yup.object().required("Seleccione una universidad"),
-    carrera: yup.string().required("Ingrese una carrera").matches(regex, "Solo puede introducir letras"),
-    numero_anios_semestres: yup.string().required("Seleccione un año"),
-    convocatoria: yup.object().required("Seleccione una convocatoria (primero eliga una modalidad)"),
-    doci: yup.mixed()
-    .test('required', "Seleccione su doc ci", (value) =>{
-      return value && value.length
-    } )
-    .test("fileSize", "No puede ser muy pesado", (value, context) => {
-      return value && value[0] && value[0].size <= 200000;
+    doc_histoAca: yup.mixed().when('tipo_postulante',{
+      is: (val) => val === "Estudiante",
+      then: (schema) => schema.required("Es necesario el historial academico en formato PDF")
+      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+        return value && value[0] && value[0].size <= 5000000;
+      })
+      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+        return value && value[0] && value[0].type === "application/pdf";
+      }),
     })
-    .test("type", "Solo documentos pdf", function (value) {
-      return value && value[0] && value[0].type === "application/pdf";
-    }),
   }).required()
 
-  const { control, handleSubmit, formState: {errors}, register, getValues} = useForm({
+  const { control, handleSubmit, formState: {errors}, register, getValues, watch} = useForm({
     mode: "all",
     defaultValues:{
       nombres: '',
@@ -137,12 +147,18 @@ export const CrearPostulante = () => {
       tipo_postulante: '',
       carrera: '',
       numero_anios_semestres: '',
-      
+      doc_ci: '',
+      doc_matricula: '',
+      doc_histoAca: ''
     },
     resolver: yupResolver(schema)
   });
+  const obsTipoPos = watch("tipo_postulante");
+  const obsDocCi = watch("doc_ci");
+  const obsDocMatricula = watch("doc_matricula");
+  const obsDocHistoAca = watch("doc_histoAca",'');
+  console.log(obsDocHistoAca)
   let navigate = useNavigate();
-  const file = getValues("doci");
   const onSubmit = async (data) => {
     console.log(data)
     // setLoading(true)
@@ -625,7 +641,7 @@ export const CrearPostulante = () => {
         </Grid>
       </Grid>
       <Grid container mt={0} spacing={2} p={2}>
-        <Grid item xs={12 } sm={5} md={4} lg={4}>
+        <Grid item xs={12} sm={5} md={4} lg={4}>
           <FormControl variant="standard" fullWidth>
             <InputLabel id="mod">Modalidad</InputLabel>
                 <Select
@@ -638,7 +654,7 @@ export const CrearPostulante = () => {
                 </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12 } sm={7} md={8} lg={8}>
+        <Grid item xs={12} sm={7} md={8} lg={8}>
         <Controller 
             name="convocatoria"
             control={control}
@@ -678,18 +694,76 @@ export const CrearPostulante = () => {
           </MDTypography>
         </Grid>
       </Grid>
-      <Grid container mt={0} spacing={2} p={2}>
-        <Grid item>
-          <Button variant="outlined" onChange={handleNameFile} component="label" startIcon={<UploadFileIcon />}>
-            Carnet de identidad
-            <input  {...register("doci")}  hidden accept="application/pdf" type="file" />
-          </Button>
-          <MDTypography variant="subtitle2" fontWeight="regular">
-            {errors.doci ? errors.doci.message : nameFiles.ciname}
-            {/* {file[0].name ? file[0].name : null} */}
-          </MDTypography>
+      <Grid container mt={0} spacing={1} p={2}>
+        <Grid item xs={12} sm={7} md={8} lg={3}>
+              <FormControl error={!!errors.doc_ci} fullWidth>
+                <Button variant="contained" color={!!errors.doc_ci ? "error" : "info"} component="label" startIcon={<AttachFileIcon/>}>
+                  Carnet de identidad
+                  <input  {...register("doc_ci")}  hidden accept="application/pdf" type="file" />
+                </Button>
+                <FormHelperText>{errors.doc_ci ? errors.doc_ci.message : null}</FormHelperText>
+              </FormControl>
+              {
+                obsDocCi ? (
+                    <Box display="flex" alignItems="center" mt={1}>
+                      <UploadFileIcon />
+                      <MDTypography variant="caption" fontWeight="regular" width={200}>
+                      {obsDocCi[0].name}
+                      </MDTypography>
+                    </Box>
+
+                ) : null
+              }
         </Grid>
-      </Grid>
+
+      {
+        obsTipoPos === "Estudiante" ? 
+        ( <>
+            <Grid item xs={12} sm={7} md={8} lg={3}>
+              <FormControl error={!!errors.doc_matricula} fullWidth>
+                <Button variant="contained" color={!!errors.doc_matricula ? "error" : "info"} component="label" startIcon={<AttachFileIcon/>}>
+                  Matricula
+                  <input  {...register("doc_matricula")}  hidden accept="application/pdf" type="file" />
+                </Button>
+                <FormHelperText>{errors.doc_matricula ? errors.doc_matricula.message : null}</FormHelperText>
+              </FormControl>
+              {
+                obsDocMatricula ? (
+                    <Box display="flex" alignItems="center" mt={1}>
+                      <UploadFileIcon />
+                      <MDTypography variant="caption" fontWeight="regular" width={200}>
+                      {obsDocMatricula[0].name}
+                      </MDTypography>
+                    </Box>
+
+                ) : null
+              }
+            </Grid>
+            <Grid item xs={12} sm={7} md={8} lg={3}>
+                  <FormControl error={!!errors.doc_histoAca} fullWidth>
+                    <Button variant="contained" color={!!errors.doc_histoAca ? "error" : "info"} component="label" startIcon={<AttachFileIcon/>}>
+                      Historial Academico
+                      <input  {...register("doc_histoAca")}  hidden accept="application/pdf" type="file" />
+                    </Button>
+                    <FormHelperText>{errors.doc_histoAca ? errors.doc_histoAca.message : null}</FormHelperText>
+                  </FormControl>
+                  {
+                    obsDocHistoAca ? (
+                        <Box display="flex" alignItems="center" mt={1}>
+                          <UploadFileIcon />
+                          <MDTypography variant="caption" fontWeight="regular" width={200}>
+                          {obsDocHistoAca[0].name}
+                          </MDTypography>
+                        </Box>
+
+                    ) : null
+                  }
+            </Grid>
+          </>
+          ) : null
+        }
+
+    </Grid>
       <Stack
           direction="row"
           justifyContent="flex-end"
