@@ -31,7 +31,7 @@ export const Postulantes = () => {
   }
 
   const getApellidos = (params) => {
-    return `${params.row.persona.primer_apellido} ${params.row.persona.segundo_apellido}`
+    return `${params.row.persona.primer_apellido} ${params.row.persona.segundo_apellido !=  null ? params.row.persona.segundo_apellido : ""}`
   }
   const getUniversidad = (params) => {
     return `${params.row.universidad.nombre}`

@@ -79,53 +79,77 @@ export const CrearPostulante = () => {
   const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]*$/g;
 
   const schema = yup.object({
-    // nombres: yup.string().required("Ingresa un nombre").matches(regex,"Solo puede introducir letras"),
-    // primer_apellido: yup.string().required("Ingresa un apellido").matches(regex,"Solo puede introducir letras"),
-    // segundo_apellido: yup.string().matches(regex,"Solo puede introducir letras"),
-    // ci: yup.string().required("Ingresa un carnet de identidad").min(5,"Minimo 5 caracteres"),
-    // extension: yup.string().required("Selecciona un departamento"),
-    // fecha_nacimiento: yup.date().nullable().required("Ingrese una fecha de nacimiento").typeError("Ingresa una fecha valida (dia/mes/año)").min(new Date("1990-01-01"), "Ingresa una fecha valida").test("fecha_nacimiento", "Tine que ser una persona mayor de 18 años", function (value) {
-    //   return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
-    // }),
-    // genero: yup.string().required("Seleccione un genero"),
-    // domicilio: yup.string().required("Ingrese su domicilio"),
-    // ciudad: yup.string().required("Ingrese ciudad de residencia").matches(regex,"Solo puede introducir letras"),
-    // correo: yup.string().email("Ingrese un correo valido"),
-    // celular: yup.string().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
-    // nombre_referencia: yup.string().required("Ingresa un nombre de refrencia").matches(regex, "Solo puede introducir letras"),
-    // celular_referencia: yup.string().nullable().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
-    // tipo_postulante: yup.string().required("Seleccione un tipo de postulante"),
-    // universidad: yup.object().required("Seleccione una universidad"),
-    // carrera: yup.string().required("Ingrese una carrera").matches(regex, "Solo puede introducir letras"),
-    // numero_anios_semestres: yup.string().required("Seleccione un año"),
-    // convocatoria: yup.object().required("Seleccione una convocatoria (primero eliga una modalidad)"),
-    doc_ci: yup.mixed().required("Es necesario el en formato PDF")
+    nombres: yup.string().required("Ingresa un nombre").matches(regex,"Solo puede introducir letras"),
+    primer_apellido: yup.string().required("Ingresa un apellido").matches(regex,"Solo puede introducir letras"),
+    segundo_apellido: yup.string().matches(regex,"Solo puede introducir letras"),
+    ci: yup.string().required("Ingresa un carnet de identidad").min(5,"Minimo 5 caracteres"),
+    extension: yup.string().required("Selecciona un departamento"),
+    fecha_nacimiento: yup.date().nullable().required("Ingrese una fecha de nacimiento").typeError("Ingresa una fecha valida (dia/mes/año)").min(new Date("1990-01-01"), "Ingresa una fecha valida").test("fecha_nacimiento", "Tine que ser una persona mayor de 18 años", function (value) {
+      return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
+    }),
+    genero: yup.string().required("Seleccione un genero"),
+    domicilio: yup.string().required("Ingrese su domicilio"),
+    ciudad: yup.string().required("Ingrese ciudad de residencia").matches(regex,"Solo puede introducir letras"),
+    correo: yup.string().email("Ingrese un correo valido"),
+    celular: yup.string().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
+    nombre_referencia: yup.string().required("Ingresa un nombre de refrencia").matches(regex, "Solo puede introducir letras"),
+    celular_referencia: yup.string().nullable().required("Ingrese un celular").matches(/^[0-9 ]*$/, "Ingrese solo numeros"),
+    tipo_postulante: yup.string().required("Seleccione un tipo de postulante"),
+    universidad: yup.object().required("Seleccione una universidad"),
+    carrera: yup.string().required("Ingrese una carrera").matches(regex, "Solo puede introducir letras"),
+    numero_anios_semestres: yup.string().required("Seleccione un año"),
+    convocatoria: yup.object().required("Seleccione una convocatoria (primero eliga una modalidad)"),
+    doc_ci: yup.mixed().required("Es necesario el CI en formato PDF")
                 .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
                   return value && value[0] && value[0].size <= 5000000;
                 })
                 .test("type", "Solo se admiten documentos en formato PDF", function (value) {
                   return value && value[0] && value[0].type === "application/pdf";
                 }),
-    doc_matricula: yup.mixed().when('tipo_postulante',{
-      is: (val) => val === "Estudiante",
-      then: (schema) => schema.required("Es necesario la matricula en formato PDF")
-      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-        return value && value[0] && value[0].size <= 5000000;
-      })
-      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-        return value && value[0] && value[0].type === "application/pdf";
-      }),
-    }),
-    doc_histoAca: yup.mixed().when('tipo_postulante',{
-      is: (val) => val === "Estudiante",
-      then: (schema) => schema.required("Es necesario el historial academico en formato PDF")
-      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-        return value && value[0] && value[0].size <= 5000000;
-      })
-      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-        return value && value[0] && value[0].type === "application/pdf";
-      }),
-    })
+    // doc_cv: yup.mixed().required("Es necesario el C.V. en formato PDF")
+    //             .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+    //               return value && value[0] && value[0].size <= 5000000;
+    //             })
+    //             .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+    //               return value && value[0] && value[0].type === "application/pdf";
+    //             }),
+    // doc_matricula: yup.mixed().when('tipo_postulante',{
+    //   is: (val) => val === "Estudiante",
+    //   then: (schema) => schema.required("Es necesario la matricula en formato PDF")
+    //   .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+    //     return value && value[0] && value[0].size <= 5000000;
+    //   })
+    //   .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+    //     return value && value[0] && value[0].type === "application/pdf";
+    //   }),
+    // }),
+    // doc_histoAca: yup.mixed().when('tipo_postulante',{
+    //   is: (val) => val === "Estudiante",
+    //   then: (schema) => schema.required("Es necesario el historial academico en formato PDF")
+    //   .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+    //     return value && value[0] && value[0].size <= 5000000;
+    //   })
+    //   .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+    //     return value && value[0] && value[0].type === "application/pdf";
+    //   }),
+    // }),
+    // doc_notasol: yup.mixed().required("Es necesario la nota de solicitud en formato PDF")
+    // .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+    //   return value && value[0] && value[0].size <= 5000000;
+    // })
+    // .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+    //   return value && value[0] && value[0].type === "application/pdf";
+    // }),
+    // doc_cerificadoEgreso: yup.mixed().when('tipo_postulante',{
+    //   is: (val) => val === "Egresado",
+    //   then: (schema) => schema.required("Es necesario el certificado de egresado en formato PDF")
+    //   .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+    //     return value && value[0] && value[0].size <= 5000000;
+    //   })
+    //   .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+    //     return value && value[0] && value[0].type === "application/pdf";
+    //   }),
+    // }),
   }).required()
 
   const { control, handleSubmit, formState: {errors}, register, getValues, watch} = useForm({
@@ -133,7 +157,7 @@ export const CrearPostulante = () => {
     defaultValues:{
       nombres: '',
       primer_apellido: '',
-      segundo_apellido: '',
+      segundo_apellido: ' ',
       ci: '',
       extension: '',
       fecha_nacimiento: null,
@@ -147,61 +171,68 @@ export const CrearPostulante = () => {
       tipo_postulante: '',
       carrera: '',
       numero_anios_semestres: '',
-      doc_ci: '',
+      doc_ci: null,
+      doc_cv: '',
       doc_matricula: '',
-      doc_histoAca: ''
+      doc_histoAca: '',
+      doc_notasol: '',
+      doc_cerificadoEgreso: ''
     },
     resolver: yupResolver(schema)
   });
   const obsTipoPos = watch("tipo_postulante");
   const obsDocCi = watch("doc_ci");
+  const obsDocCv = watch("doc_cv");
   const obsDocMatricula = watch("doc_matricula");
-  const obsDocHistoAca = watch("doc_histoAca",'');
-  console.log(obsDocHistoAca)
+  const obsDocHistoAca = watch("doc_histoAca");
+  const obsDocNotaSol = watch("doc_notasol");
+  const obsDocCertificadoE = watch("doc_cerificadoEgreso");
+  
   let navigate = useNavigate();
   const onSubmit = async (data) => {
     console.log(data)
-    // setLoading(true)
-    // try{
-    //   const response = await apiClient.post('/api/postulantes/crear',{
-    //     nombres: data.nombres,
-    //     primer_apellido: data.primer_apellido,
-    //     segundo_apellido: data.segundo_apellido,
-    //     ci: data.ci,
-    //     extension: data.extension,
-    //     fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
-    //     genero: data.genero,
-    //     domicilio: data.domicilio,
-    //     ciudad: data.ciudad,
-    //     correo: data.correo,
-    //     celular: Number(data.celular),
-    //     nombre_referencia: data.nombre_referencia,
-    //     numero_referencia: Number(data.celular_referencia),
-    //     tipo_postulante: data.tipo_postulante,
-    //     carrera: data.carrera,
-    //     numero_anios_semestre: data.numero_anios_semestres,
-    //     id_universidad: data.universidad.id,
-    //     id_pasantia: data.convocatoria.id
-    //   });
+    setLoading(true)
+    try{
+      const response = await apiClient.post('/api/postulantes/crear',{
+        nombres: data.nombres,
+        primer_apellido: data.primer_apellido,
+        segundo_apellido: data.segundo_apellido,
+        ci: data.ci,
+        extension: data.extension,
+        fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
+        genero: data.genero,
+        domicilio: data.domicilio,
+        ciudad: data.ciudad,
+        correo: data.correo,
+        celular: Number(data.celular),
+        nombre_referencia: data.nombre_referencia,
+        numero_referencia: Number(data.celular_referencia),
+        tipo_postulante: data.tipo_postulante,
+        carrera: data.carrera,
+        numero_anios_semestre: data.numero_anios_semestres,
+        id_universidad: data.universidad.id,
+        id_pasantia: data.convocatoria.id,
+        doc_ci: data.doc_ci[0],
+      },{headers:{'Content-Type': 'multipart/form-data',}});
 
-    //   if (response.data.message === 'success') {
-    //     setLoading(false)
-    //     Swal.fire({
-    //       title: 'Agregado con exito!',
-    //       text: 'Se agrego a un nuevo postulante',
-    //       icon: 'success'
-    //     });
-    //     navigate('/postulantes');
-    //   }
-    // } catch (error){
-    //   console.error(error)
-    //   setLoading(false)
-    //   Swal.fire({
-    //     title: 'Ocurrio un error al guardar',
-    //     text: 'Por favor intente nuevamente',
-    //     icon: 'error',
-    //   });
-    // }
+      if (response.data.message === 'success') {
+        setLoading(false)
+        Swal.fire({
+          title: 'Agregado con exito!',
+          text: 'Se agrego a un nuevo postulante',
+          icon: 'success'
+        });
+        navigate('/postulantes');
+      }
+    } catch (error){
+      console.error(error)
+      setLoading(false)
+      Swal.fire({
+        title: 'Ocurrio un error al guardar',
+        text: 'Por favor intente nuevamente',
+        icon: 'error',
+      });
+    }
   }
   return (
     <FormLayout>
@@ -695,9 +726,9 @@ export const CrearPostulante = () => {
         </Grid>
       </Grid>
       <Grid container mt={0} spacing={1} p={2}>
-        <Grid item xs={12} sm={7} md={8} lg={3}>
+        <Grid item xs={12} sm={7} md={8} lg={4}>
               <FormControl error={!!errors.doc_ci} fullWidth>
-                <Button variant="contained" color={!!errors.doc_ci ? "error" : "info"} component="label" startIcon={<AttachFileIcon/>}>
+                <Button variant="contained" color={!!errors.doc_ci ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
                   Carnet de identidad
                   <input  {...register("doc_ci")}  hidden accept="application/pdf" type="file" />
                 </Button>
@@ -707,7 +738,7 @@ export const CrearPostulante = () => {
                 obsDocCi ? (
                     <Box display="flex" alignItems="center" mt={1}>
                       <UploadFileIcon />
-                      <MDTypography variant="caption" fontWeight="regular" width={200}>
+                      <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
                       {obsDocCi[0].name}
                       </MDTypography>
                     </Box>
@@ -715,13 +746,53 @@ export const CrearPostulante = () => {
                 ) : null
               }
         </Grid>
+        <Grid item xs={12} sm={7} md={8} lg={4}>
+              <FormControl error={!!errors.doc_cv} fullWidth>
+                <Button variant="contained" color={!!errors.doc_cv ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
+                  Hoja de Vida
+                  <input  {...register("doc_cv")}  hidden accept="application/pdf" type="file" />
+                </Button>
+                <FormHelperText>{errors.doc_cv ? errors.doc_cv.message : null}</FormHelperText>
+              </FormControl>
+              {
+                obsDocCv ? (
+                    <Box display="flex" alignItems="center" mt={1}>
+                      <UploadFileIcon />
+                      <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
+                      {obsDocCv[0].name}
+                      </MDTypography>
+                    </Box>
+
+                ) : null
+              }
+        </Grid>
+        <Grid item xs={12} sm={7} md={8} lg={4}>
+                  <FormControl error={!!errors.doc_notasol} fullWidth>
+                    <Button variant="contained" color={!!errors.doc_notasol ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
+                      Nota de solicitud
+                      <input  {...register("doc_notasol")}  hidden accept="application/pdf" type="file" />
+                    </Button>
+                    <FormHelperText>{errors.doc_notasol ? errors.doc_notasol.message : null}</FormHelperText>
+                  </FormControl>
+                  {
+                    obsDocNotaSol ? (
+                        <Box display="flex" alignItems="center" mt={1}>
+                          <UploadFileIcon />
+                          <MDTypography variant="caption" fontWeight="regular" width={200}>
+                          {obsDocNotaSol[0].name}
+                          </MDTypography>
+                        </Box>
+
+                    ) : null
+                  }
+            </Grid>
 
       {
         obsTipoPos === "Estudiante" ? 
         ( <>
             <Grid item xs={12} sm={7} md={8} lg={3}>
               <FormControl error={!!errors.doc_matricula} fullWidth>
-                <Button variant="contained" color={!!errors.doc_matricula ? "error" : "info"} component="label" startIcon={<AttachFileIcon/>}>
+                <Button variant="contained" color={!!errors.doc_matricula ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
                   Matricula
                   <input  {...register("doc_matricula")}  hidden accept="application/pdf" type="file" />
                 </Button>
@@ -739,9 +810,9 @@ export const CrearPostulante = () => {
                 ) : null
               }
             </Grid>
-            <Grid item xs={12} sm={7} md={8} lg={3}>
+            <Grid item xs={12} sm={7} md={8} lg={4}>
                   <FormControl error={!!errors.doc_histoAca} fullWidth>
-                    <Button variant="contained" color={!!errors.doc_histoAca ? "error" : "info"} component="label" startIcon={<AttachFileIcon/>}>
+                    <Button variant="contained" color={!!errors.doc_histoAca ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
                       Historial Academico
                       <input  {...register("doc_histoAca")}  hidden accept="application/pdf" type="file" />
                     </Button>
@@ -759,9 +830,34 @@ export const CrearPostulante = () => {
                     ) : null
                   }
             </Grid>
+            
           </>
           ) : null
         }
+      {
+        obsTipoPos === "Egresado" ? (
+          <Grid item xs={12} sm={7} md={8} lg={4}>
+              <FormControl error={!!errors.doc_cerificadoEgreso} fullWidth>
+                <Button variant="contained" color={!!errors.doc_cerificadoEgreso ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
+                  Certificado Egreso
+                  <input  {...register("doc_cerificadoEgreso")}  hidden accept="application/pdf" type="file" />
+                </Button>
+                <FormHelperText>{errors.doc_cerificadoEgreso ? errors.doc_cerificadoEgreso.message : null}</FormHelperText>
+              </FormControl>
+              {
+                obsDocCertificadoE ? (
+                    <Box display="flex" alignItems="center" mt={1}>
+                      <UploadFileIcon />
+                      <MDTypography variant="caption" fontWeight="regular" width={200}>
+                      {obsDocCertificadoE[0].name}
+                      </MDTypography>
+                    </Box>
+
+                ) : null
+              }
+            </Grid>
+        ) : null
+      }
 
     </Grid>
       <Stack
