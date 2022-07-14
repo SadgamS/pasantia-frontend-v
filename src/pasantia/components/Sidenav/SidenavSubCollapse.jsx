@@ -13,9 +13,9 @@ export const SidenavSubCollapse = ({ name, icon, items, active }) => {
 
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = useContext( CustomTheme );
   const collapseName = location.pathname.replace("/", "");
-  let esActivo = false
+  let esActivo = false;
   items.forEach(i => {
-    if (i.key === collapseName) {
+    if (i.key === collapseName || collapseName.replace("/"," ").includes(i.key)) {
       esActivo = true
     }
   });
@@ -69,7 +69,7 @@ export const SidenavSubCollapse = ({ name, icon, items, active }) => {
                     items.map(({name, key, icon, route}) => 
                         (
                           <NavLink key={key} to={route}>
-                            <SidenavCollapse name={name} icon={icon} active={key === collapseName}/>
+                            <SidenavCollapse name={name} icon={icon} active={collapseName.replace("/"," ").includes(key)}/>
                           </NavLink>
                         )
                     ) 
