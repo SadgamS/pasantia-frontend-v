@@ -91,7 +91,7 @@ export const Postulantes = () => {
               </Grid>
             </Grid>
             <Grid item mt={2}>
-              <Link to={'/postulantes/crearPostulante'}>
+              <Link to={'/postulantes/crear-postulante'}>
                 <Button sx={{fontSize: 'small'}} variant='contained' startIcon={<AddIcon />}>
                   Agregar postulante
                 </Button>

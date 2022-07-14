@@ -35,10 +35,10 @@ const routes = [
       route: "/postulantes",
     },
     {
-      name: "Funcionarios",
-      key: "funcionarios",
+      name: "Servidores publicos",
+      key: "servidores-publicos",
       icon: <WorkIcon fontSize="small" />,
-      route: "/funcionarios"
+      route: "/servidores-publicos"
     },
     {
       name: "Tutores Academicos",

@@ -81,7 +81,7 @@ export const CrearPostulante = () => {
     primer_apellido: yup.string().required("Ingresa un apellido").matches(regex,"Solo puede introducir letras"),
     segundo_apellido: yup.string().matches(regex,"Solo puede introducir letras"),
     ci: yup.string().required("Ingresa un carnet de identidad").min(5,"Minimo 5 caracteres"),
-    extension: yup.string().required("Selecciona un departamento"),
+    expedicion: yup.string().required("Selecciona un departamento"),
     fecha_nacimiento: yup.date().nullable().required("Ingrese una fecha de nacimiento").typeError("Ingresa una fecha valida (dia/mes/año)").min(new Date("1990-01-01"), "Ingresa una fecha valida").test("fecha_nacimiento", "Tine que ser una persona mayor de 18 años", function (value) {
       return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
     }),
@@ -138,7 +138,7 @@ export const CrearPostulante = () => {
     .test("type", "Solo se admiten documentos en formato PDF", function (value) {
       return value && value[0] && value[0].type === "application/pdf";
     }),
-    doc_cerificadoEgreso: yup.mixed().when('tipo_postulante',{
+    doc_certificadoEgreso: yup.mixed().when('tipo_postulante',{
       is: (val) => val === "Egresado",
       then: (schema) => schema.required("Es necesario el certificado de egresado en formato PDF")
       .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
@@ -157,7 +157,7 @@ export const CrearPostulante = () => {
       primer_apellido: '',
       segundo_apellido: '',
       ci: '',
-      extension: '',
+      expedicion: '',
       fecha_nacimiento: null,
       genero: '',
       domicilio: '',
@@ -169,12 +169,12 @@ export const CrearPostulante = () => {
       tipo_postulante: '',
       carrera: '',
       numero_anios_semestres: '',
-      doc_ci: null,
-      doc_cv: null,
-      doc_matricula: null,
-      doc_histoAca: null,
-      doc_notasol: null,
-      doc_cerificadoEgreso: null
+      doc_ci: "",
+      doc_cv: "",
+      doc_matricula: "",
+      doc_histoAca:"",
+      doc_notasol: "",
+      doc_certificadoEgreso:""
     },
     resolver: yupResolver(schema)
   });
@@ -184,7 +184,7 @@ export const CrearPostulante = () => {
   const obsDocMatricula = watch("doc_matricula");
   const obsDocHistoAca = watch("doc_histoAca");
   const obsDocNotaSol = watch("doc_notasol");
-  const obsDocCertificadoE = watch("doc_cerificadoEgreso");
+  const obsDocCertificadoE = watch("doc_certificadoEgreso");
   
   let navigate = useNavigate();
   const onSubmit = async (data) => {
@@ -196,7 +196,7 @@ export const CrearPostulante = () => {
         primer_apellido: data.primer_apellido,
         segundo_apellido: data.segundo_apellido,
         ci: data.ci,
-        extension: data.extension,
+        expedicion: data.expedicion,
         fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
         genero: data.genero,
         domicilio: data.domicilio,
@@ -205,9 +205,9 @@ export const CrearPostulante = () => {
         celular: Number(data.celular),
         nombre_referencia: data.nombre_referencia,
         numero_referencia: Number(data.celular_referencia),
-        tipo_postulante: data.tipo_postulante,
+        tipo_postulante: data.tipo_postulante.toUpperCase(),
         carrera: data.carrera,
-        numero_anios_semestre: data.numero_anios_semestres,
+        numero_anios_semestre: data.numero_anios_semestres.toUpperCase(),
         id_universidad: data.universidad.id,
         id_pasantia: data.convocatoria.id,
         doc_ci: data.doc_ci[0],
@@ -215,9 +215,9 @@ export const CrearPostulante = () => {
         doc_matricula: data.doc_matricula ? data.doc_matricula[0]: '',
         doc_histoAca: data.doc_histoAca ? data.doc_histoAca[0]: '',
         doc_notasol: data.doc_notasol[0],
-        doc_cerificadoEgreso: data.doc_cerificadoEgreso ? data.doc_cerificadoEgreso[0] : '',
+        doc_certificadoEgreso: data.doc_certificadoEgreso ? data.doc_certificadoEgreso[0] : '',
       },{headers:{'Content-Type': 'multipart/form-data',}});
-
+      console.log(response)
       if (response.data.message === 'success') {
         setLoading(false)
         Swal.fire({
@@ -226,6 +226,13 @@ export const CrearPostulante = () => {
           icon: 'success'
         });
         navigate('/postulantes');
+      } else if(response.data.message === 'error'){
+        setLoading(false)
+        Swal.fire({
+          title: 'Ocurrio un error al guardar',
+          text: 'Por favor intente nuevamente',
+          icon: 'error',
+        });
       }
     } catch (error){
       console.error(error)
@@ -347,10 +354,10 @@ export const CrearPostulante = () => {
             />
           </Grid>
           <Grid item xs={6} sm={5} md={3} lg={2}>
-            <FormControl variant="standard" fullWidth error={!!errors.extension}>
+            <FormControl variant="standard" fullWidth error={!!errors.expedicion}>
               <InputLabel id="ext">Extensión</InputLabel>
             <Controller 
-              name="extension"
+              name="expedicion"
               control={control}
               render={({field:{onChange, value, onBlur}})=>(
               <Select
@@ -360,19 +367,19 @@ export const CrearPostulante = () => {
                 labelId="ext" 
                 label="Extension"
               >
-                <MenuItem value={"La Paz".toUpperCase()}>La Paz</MenuItem>
-                <MenuItem value={"Santa Cruz".toUpperCase()}>Santa Cruz</MenuItem>
-                <MenuItem value={"Oruro".toUpperCase()}>Oruro</MenuItem>
-                <MenuItem value={"Cochabamba".toUpperCase()}>Cochabamba</MenuItem>
-                <MenuItem value={"Pando".toUpperCase()}>Pando</MenuItem>
-                <MenuItem value={"Potosi".toUpperCase()}>Potosi</MenuItem>
-                <MenuItem value={"Tarija".toUpperCase()}>Tarija</MenuItem>
-                <MenuItem value={"Sucre".toUpperCase()}>Sucre</MenuItem>
-                <MenuItem value={"Beni".toUpperCase()}>Beni</MenuItem>
+                <MenuItem value={"LP"}>La Paz</MenuItem>
+                <MenuItem value={"SC"}>Santa Cruz</MenuItem>
+                <MenuItem value={"OR"}>Oruro</MenuItem>
+                <MenuItem value={"CB"}>Cochabamba</MenuItem>
+                <MenuItem value={"PD"}>Pando</MenuItem>
+                <MenuItem value={"PT"}>Potosi</MenuItem>
+                <MenuItem value={"TJ"}>Tarija</MenuItem>
+                <MenuItem value={"CH"}>Chuquisaca</MenuItem>
+                <MenuItem value={"BE"}>Beni</MenuItem>
               </Select>
               )}
               />
-              <FormHelperText>{errors.extension ? errors.extension.message : null}</FormHelperText>
+              <FormHelperText>{errors.expedicion ? errors.expedicion.message : null}</FormHelperText>
               </FormControl>
           </Grid>
           <Grid item xs={8} sm={5} md={4} lg={3}>
@@ -429,7 +436,7 @@ export const CrearPostulante = () => {
           </Grid>
         </Grid>
       <Grid container mt={0} spacing={2} p={1} >
-        <Grid item xs={12} sm={7} md={6} lg={5}>
+        <Grid item xs={12} sm={7} md={5} lg={5}>
           <Controller 
             name="domicilio"
             control={control}
@@ -452,7 +459,7 @@ export const CrearPostulante = () => {
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={5} md={2} lg={3}>
+        <Grid item xs={12} sm={5} md={3} lg={3}>
         <Controller 
           name="ciudad"
           control={control}
@@ -627,7 +634,7 @@ export const CrearPostulante = () => {
             render={({field: {onChange, value, onBlur}, fieldState: {error}})=>(
               <TextField
                 value={value}
-                onChange={onChange}
+                onChange={(e)=>onChange(e.target.value.toUpperCase())}
                 onBlur={onBlur}
                 error={!!error}
                 helperText={error ? error.message : null}
@@ -682,7 +689,7 @@ export const CrearPostulante = () => {
                   value={modalidad}
                   onChange={(e => setModalidad(e.target.value))}
                   labelId="mod" 
-                  label="Extension">
+                  label="Modalidad">
                   <MenuItem value="pasantia">Pasantia</MenuItem>
                   <MenuItem value="trabajo dirigido">Trabajo dirigido</MenuItem>
                 </Select>
@@ -831,12 +838,12 @@ export const CrearPostulante = () => {
       {
         obsTipoPos === "Egresado" ? (
           <Grid item xs={12} sm={7} md={8} lg={4}>
-              <FormControl error={!!errors.doc_cerificadoEgreso} fullWidth>
-                <Button variant="contained" color={!!errors.doc_cerificadoEgreso ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
+              <FormControl error={!!errors.doc_certificadoEgreso} fullWidth>
+                <Button variant="contained" color={!!errors.doc_certificadoEgreso ? "error" : "primary"} component="label" startIcon={<AttachFileIcon/>}>
                   Certificado Egreso
-                  <input  {...register("doc_cerificadoEgreso")}  hidden accept="application/pdf" type="file" />
+                  <input  {...register("doc_certificadoEgreso")}  hidden accept="application/pdf" type="file" />
                 </Button>
-                <FormHelperText>{errors.doc_cerificadoEgreso ? errors.doc_cerificadoEgreso.message : null}</FormHelperText>
+                <FormHelperText>{errors.doc_certificadoEgreso ? errors.doc_certificadoEgreso.message : null}</FormHelperText>
               </FormControl>
               {
                 obsDocCertificadoE ? (
