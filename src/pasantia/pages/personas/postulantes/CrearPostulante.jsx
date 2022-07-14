@@ -2,7 +2,6 @@ import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
   Button,
-  CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -15,7 +14,6 @@ import {
   Select,
   Stack,
   TextField,
-  Typography,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -106,50 +104,50 @@ export const CrearPostulante = () => {
                 .test("type", "Solo se admiten documentos en formato PDF", function (value) {
                   return value && value[0] && value[0].type === "application/pdf";
                 }),
-    // doc_cv: yup.mixed().required("Es necesario el C.V. en formato PDF")
-    //             .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-    //               return value && value[0] && value[0].size <= 5000000;
-    //             })
-    //             .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-    //               return value && value[0] && value[0].type === "application/pdf";
-    //             }),
-    // doc_matricula: yup.mixed().when('tipo_postulante',{
-    //   is: (val) => val === "Estudiante",
-    //   then: (schema) => schema.required("Es necesario la matricula en formato PDF")
-    //   .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-    //     return value && value[0] && value[0].size <= 5000000;
-    //   })
-    //   .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-    //     return value && value[0] && value[0].type === "application/pdf";
-    //   }),
-    // }),
-    // doc_histoAca: yup.mixed().when('tipo_postulante',{
-    //   is: (val) => val === "Estudiante",
-    //   then: (schema) => schema.required("Es necesario el historial academico en formato PDF")
-    //   .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-    //     return value && value[0] && value[0].size <= 5000000;
-    //   })
-    //   .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-    //     return value && value[0] && value[0].type === "application/pdf";
-    //   }),
-    // }),
-    // doc_notasol: yup.mixed().required("Es necesario la nota de solicitud en formato PDF")
-    // .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-    //   return value && value[0] && value[0].size <= 5000000;
-    // })
-    // .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-    //   return value && value[0] && value[0].type === "application/pdf";
-    // }),
-    // doc_cerificadoEgreso: yup.mixed().when('tipo_postulante',{
-    //   is: (val) => val === "Egresado",
-    //   then: (schema) => schema.required("Es necesario el certificado de egresado en formato PDF")
-    //   .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
-    //     return value && value[0] && value[0].size <= 5000000;
-    //   })
-    //   .test("type", "Solo se admiten documentos en formato PDF", function (value) {
-    //     return value && value[0] && value[0].type === "application/pdf";
-    //   }),
-    // }),
+    doc_cv: yup.mixed().required("Es necesario el C.V. en formato PDF")
+                .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+                  return value && value[0] && value[0].size <= 5000000;
+                })
+                .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+                  return value && value[0] && value[0].type === "application/pdf";
+                }),
+    doc_matricula: yup.mixed().when('tipo_postulante',{
+      is: (val) => val === "Estudiante",
+      then: (schema) => schema.required("Es necesario la matricula en formato PDF")
+      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+        return value && value[0] && value[0].size <= 5000000;
+      })
+      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+        return value && value[0] && value[0].type === "application/pdf";
+      }),
+    }),
+    doc_histoAca: yup.mixed().when('tipo_postulante',{
+      is: (val) => val === "Estudiante",
+      then: (schema) => schema.required("Es necesario el historial academico en formato PDF")
+      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+        return value && value[0] && value[0].size <= 5000000;
+      })
+      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+        return value && value[0] && value[0].type === "application/pdf";
+      }),
+    }),
+    doc_notasol: yup.mixed().required("Es necesario la nota de solicitud en formato PDF")
+    .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+      return value && value[0] && value[0].size <= 5000000;
+    })
+    .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+      return value && value[0] && value[0].type === "application/pdf";
+    }),
+    doc_cerificadoEgreso: yup.mixed().when('tipo_postulante',{
+      is: (val) => val === "Egresado",
+      then: (schema) => schema.required("Es necesario el certificado de egresado en formato PDF")
+      .test("fileSize", "El archivo no puede pesar más de 5Mb", (value, context) => {
+        return value && value[0] && value[0].size <= 5000000;
+      })
+      .test("type", "Solo se admiten documentos en formato PDF", function (value) {
+        return value && value[0] && value[0].type === "application/pdf";
+      }),
+    }),
   }).required()
 
   const { control, handleSubmit, formState: {errors}, register, getValues, watch} = useForm({
@@ -157,7 +155,7 @@ export const CrearPostulante = () => {
     defaultValues:{
       nombres: '',
       primer_apellido: '',
-      segundo_apellido: ' ',
+      segundo_apellido: '',
       ci: '',
       extension: '',
       fecha_nacimiento: null,
@@ -172,11 +170,11 @@ export const CrearPostulante = () => {
       carrera: '',
       numero_anios_semestres: '',
       doc_ci: null,
-      doc_cv: '',
-      doc_matricula: '',
-      doc_histoAca: '',
-      doc_notasol: '',
-      doc_cerificadoEgreso: ''
+      doc_cv: null,
+      doc_matricula: null,
+      doc_histoAca: null,
+      doc_notasol: null,
+      doc_cerificadoEgreso: null
     },
     resolver: yupResolver(schema)
   });
@@ -213,6 +211,11 @@ export const CrearPostulante = () => {
         id_universidad: data.universidad.id,
         id_pasantia: data.convocatoria.id,
         doc_ci: data.doc_ci[0],
+        doc_cv: data.doc_cv[0],
+        doc_matricula: data.doc_matricula ? data.doc_matricula[0]: '',
+        doc_histoAca: data.doc_histoAca ? data.doc_histoAca[0]: '',
+        doc_notasol: data.doc_notasol[0],
+        doc_cerificadoEgreso: data.doc_cerificadoEgreso ? data.doc_cerificadoEgreso[0] : '',
       },{headers:{'Content-Type': 'multipart/form-data',}});
 
       if (response.data.message === 'success') {
@@ -258,7 +261,7 @@ export const CrearPostulante = () => {
               control={control}
               render={({field: {onChange, value, onBlur}, fieldState: {error}}) => (
                 <TextField
-                  onChange={onChange}
+                  onChange={(e)=>onChange(e.target.value.toUpperCase())}
                   onBlur={onBlur}
                   value={value}
                   variant="standard"
@@ -281,7 +284,7 @@ export const CrearPostulante = () => {
               control={control}
               render={({field: {onChange, value, onBlur}, fieldState: {error}}) => (
                 <TextField
-                  onChange={onChange}
+                  onChange={(e)=>onChange(e.target.value.toUpperCase())}
                   value={value}
                   onBlur={onBlur}
                   variant="standard"
@@ -303,7 +306,7 @@ export const CrearPostulante = () => {
               control={control}
               render={({field: {onChange, value, onBlur}, fieldState: {error}}) => (
                 <TextField
-                  onChange={onChange}
+                  onChange={(e)=>onChange(e.target.value.toUpperCase())}
                   value={value}
                   onBlur={onBlur}
                   variant="standard"
@@ -327,7 +330,7 @@ export const CrearPostulante = () => {
               control={control}
               render={({field: {onChange, value, onBlur}, fieldState: {error}}) => (
                 <TextField
-                  onChange={onChange}
+                  onChange={(e)=>onChange(e.target.value.toUpperCase())}
                   value={value}
                   onBlur={onBlur}
                   variant="standard"
@@ -357,15 +360,15 @@ export const CrearPostulante = () => {
                 labelId="ext" 
                 label="Extension"
               >
-                <MenuItem value={"La Paz"}>La Paz</MenuItem>
-                <MenuItem value={"Santa Cruz"}>Santa Cruz</MenuItem>
-                <MenuItem value={"Oruro"}>Oruro</MenuItem>
-                <MenuItem value={"Cochabamba"}>Cochabamba</MenuItem>
-                <MenuItem value={"Pando"}>Pando</MenuItem>
-                <MenuItem value={"Potosi"}>Potosi</MenuItem>
-                <MenuItem value={"Tarija"}>Tarija</MenuItem>
-                <MenuItem value={"Sucre"}>Sucre</MenuItem>
-                <MenuItem value={"Beni"}>Beni</MenuItem>
+                <MenuItem value={"La Paz".toUpperCase()}>La Paz</MenuItem>
+                <MenuItem value={"Santa Cruz".toUpperCase()}>Santa Cruz</MenuItem>
+                <MenuItem value={"Oruro".toUpperCase()}>Oruro</MenuItem>
+                <MenuItem value={"Cochabamba".toUpperCase()}>Cochabamba</MenuItem>
+                <MenuItem value={"Pando".toUpperCase()}>Pando</MenuItem>
+                <MenuItem value={"Potosi".toUpperCase()}>Potosi</MenuItem>
+                <MenuItem value={"Tarija".toUpperCase()}>Tarija</MenuItem>
+                <MenuItem value={"Sucre".toUpperCase()}>Sucre</MenuItem>
+                <MenuItem value={"Beni".toUpperCase()}>Beni</MenuItem>
               </Select>
               )}
               />
@@ -433,7 +436,7 @@ export const CrearPostulante = () => {
             render={({field:{onChange, value, onBlur}, fieldState:{error}})=>(
               <TextField
                 value={value}
-                onChange={onChange}
+                onChange={(e)=>onChange(e.target.value.toUpperCase())}
                 onBlur={onBlur}
                 error={!!error}
                 placeholder="Calle Numero Zona"
@@ -458,7 +461,7 @@ export const CrearPostulante = () => {
               variant="standard"
               label="Ciudad de residencia"
               value={value}
-              onChange={onChange}
+              onChange={(e)=>onChange(e.target.value.toUpperCase())}
               onBlur={onBlur}
               error={!!error}
               helperText={error ? error.message : null}
@@ -526,12 +529,12 @@ export const CrearPostulante = () => {
           render={({field:{onChange, value, onBlur}, fieldState:{error}})=>( 
             <TextField
               value={value}
-              onChange={onChange}
+              onChange={(e)=>onChange(e.target.value.toUpperCase())}
               onBlur={onBlur}
               error={!!error}
               helperText={error ? error.message : null}
               variant="standard" 
-              label="Nombre de un familiar de referencia"
+              label="Nombre completo de un familiar de referencia"
               InputLabelProps={{
                   shrink: true,
                 }}
@@ -703,15 +706,6 @@ export const CrearPostulante = () => {
                     helperText={ errors.convocatoria ? errors.convocatoria.message : "Seleccione una modalidad para ver las convocatorias"}
                     label="Convocatorias de pasantia o trabajo dirigido" 
                     variant="standard" 
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {loadingConv ? <CircularProgress color="inherit" size={20} /> : null}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    }}
                     />}
               />
             )}
