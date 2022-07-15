@@ -205,7 +205,7 @@ export const CrearPostulante = () => {
         celular: Number(data.celular),
         nombre_referencia: data.nombre_referencia,
         numero_referencia: Number(data.celular_referencia),
-        tipo_postulante: data.tipo_postulante.toUpperCase(),
+        tipo_postulante: data.tipo_postulante,
         carrera: data.carrera,
         numero_anios_semestre: data.numero_anios_semestres.toUpperCase(),
         id_universidad: data.universidad.id,
