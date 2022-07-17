@@ -150,7 +150,7 @@ export const CrearPostulante = () => {
     }),
   }).required()
 
-  const { control, handleSubmit, formState: {errors}, register, getValues, watch} = useForm({
+  const { control, handleSubmit, formState: {errors}, register, watch, setValue} = useForm({
     mode: "all",
     defaultValues:{
       nombres: '',
@@ -169,12 +169,12 @@ export const CrearPostulante = () => {
       tipo_postulante: '',
       carrera: '',
       numero_anios_semestres: '',
-      doc_ci: "",
-      doc_cv: "",
-      doc_matricula: "",
-      doc_histoAca:"",
-      doc_notasol: "",
-      doc_certificadoEgreso:""
+      doc_ci: null,
+      doc_cv: null,
+      doc_matricula: null,
+      doc_histoAca:null,
+      doc_notasol: null,
+      doc_certificadoEgreso:null
     },
     resolver: yupResolver(schema)
   });
@@ -185,7 +185,7 @@ export const CrearPostulante = () => {
   const obsDocHistoAca = watch("doc_histoAca");
   const obsDocNotaSol = watch("doc_notasol");
   const obsDocCertificadoE = watch("doc_certificadoEgreso");
-  
+  console.log(obsDocCi);
   let navigate = useNavigate();
   const onSubmit = async (data) => {
     console.log(data)
@@ -592,7 +592,14 @@ export const CrearPostulante = () => {
               render={({field: {onChange, value, onBlur}})=>(
               <RadioGroup 
                 row
-                onChange={onChange}
+                onChange={(e)=>{onChange(e)
+                  if (e.target.value === "Estudiante") {
+                    setValue('doc_matricula', null)
+                    setValue('doc_histoAca', null)
+                  }else if (e.target.value === "Egresado"){
+                    setValue('doc_certificadoEgreso', null)
+                  }    
+                }}
                 value={value}
                 onBlur={onBlur}
                 aria-labelledby="row-radio-label">
@@ -736,7 +743,7 @@ export const CrearPostulante = () => {
                 <FormHelperText>{errors.doc_ci ? errors.doc_ci.message : null}</FormHelperText>
               </FormControl>
               {
-                obsDocCi ? (
+               obsDocCi && obsDocCi.length > 0 ? (
                     <Box display="flex" alignItems="center" mt={1}>
                       <UploadFileIcon />
                       <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
@@ -756,7 +763,7 @@ export const CrearPostulante = () => {
                 <FormHelperText>{errors.doc_cv ? errors.doc_cv.message : null}</FormHelperText>
               </FormControl>
               {
-                obsDocCv ? (
+               obsDocCv && obsDocCv.length > 0 ? (
                     <Box display="flex" alignItems="center" mt={1}>
                       <UploadFileIcon />
                       <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
@@ -776,10 +783,10 @@ export const CrearPostulante = () => {
                     <FormHelperText>{errors.doc_notasol ? errors.doc_notasol.message : null}</FormHelperText>
                   </FormControl>
                   {
-                    obsDocNotaSol ? (
+                   obsDocNotaSol && obsDocNotaSol.length > 0 ? (
                         <Box display="flex" alignItems="center" mt={1}>
                           <UploadFileIcon />
-                          <MDTypography variant="caption" fontWeight="regular" width={200}>
+                          <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
                           {obsDocNotaSol[0].name}
                           </MDTypography>
                         </Box>
@@ -800,10 +807,10 @@ export const CrearPostulante = () => {
                 <FormHelperText>{errors.doc_matricula ? errors.doc_matricula.message : null}</FormHelperText>
               </FormControl>
               {
-                obsDocMatricula ? (
+                obsDocMatricula && obsDocMatricula.length > 0 ? (
                     <Box display="flex" alignItems="center" mt={1}>
                       <UploadFileIcon />
-                      <MDTypography variant="caption" fontWeight="regular" width={200}>
+                      <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
                       {obsDocMatricula[0].name}
                       </MDTypography>
                     </Box>
@@ -820,10 +827,10 @@ export const CrearPostulante = () => {
                     <FormHelperText>{errors.doc_histoAca ? errors.doc_histoAca.message : null}</FormHelperText>
                   </FormControl>
                   {
-                    obsDocHistoAca ? (
+                    obsDocHistoAca && obsDocHistoAca.length > 0 ? (
                         <Box display="flex" alignItems="center" mt={1}>
                           <UploadFileIcon />
-                          <MDTypography variant="caption" fontWeight="regular" width={200}>
+                          <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
                           {obsDocHistoAca[0].name}
                           </MDTypography>
                         </Box>
@@ -846,10 +853,10 @@ export const CrearPostulante = () => {
                 <FormHelperText>{errors.doc_certificadoEgreso ? errors.doc_certificadoEgreso.message : null}</FormHelperText>
               </FormControl>
               {
-                obsDocCertificadoE ? (
+                obsDocCertificadoE && obsDocCertificadoE.length > 0 ? (
                     <Box display="flex" alignItems="center" mt={1}>
                       <UploadFileIcon />
-                      <MDTypography variant="caption" fontWeight="regular" width={200}>
+                      <MDTypography variant="caption" sx={{fontSize: 16}} fontWeight="regular" width={200}>
                       {obsDocCertificadoE[0].name}
                       </MDTypography>
                     </Box>
