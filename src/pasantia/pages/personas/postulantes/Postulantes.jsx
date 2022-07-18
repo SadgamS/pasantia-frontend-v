@@ -18,14 +18,22 @@ import { Link } from 'react-router-dom';
 export const Postulantes = () => {
   const [loading, setLoading] = useState(true);
   const [postulantes, setPostulantes] = useState([])
+  const [page, setPage] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const handleChange = (newPage) => {
+      setPage(newPage)
+    }
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/postulantes')
+    axios.get(`http://127.0.0.1:8000/api/postulantes?page=${page+1}`)
     .then(response => {
-      setPostulantes(response.data);
+      setPostulantes(response.data.data);
+      setRowCount(response.data.total);
+      setPageSize(response.data.per_page)
       setLoading(false);
     }).catch(error => console.error(error))
-  }, [])
-  console.log(postulantes)
+  }, [page])
+
   const getNombres = (params) => {
     return `${params.row.persona.nombres}`
   }
@@ -42,7 +50,7 @@ export const Postulantes = () => {
   }
 
   const getCi = (params) => {
-    return `${params.row.persona.ci} ${params.row.persona.extension}`
+    return `${params.row.persona.ci} ${params.row.persona.expedicion}`
   }
   
   const columns = [
@@ -97,7 +105,7 @@ export const Postulantes = () => {
                 </Button>
               </Link>
             </Grid>
-            <TableGrid rows={postulantes} columns={columns} loading={loading}/>
+            <TableGrid rows={postulantes} columns={columns} loading={loading}  page={page} pageSize={pageSize} rowCount={rowCount} setPage={handleChange}/>
           </Grid>
         </MDBox>
     </DashboardLayout>

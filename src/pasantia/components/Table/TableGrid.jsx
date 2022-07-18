@@ -3,7 +3,7 @@ import { DataGrid, esES, GridToolbarContainer, GridToolbarColumnsButton,
     GridToolbarFilterButton,
     GridToolbarDensitySelector,
     GridToolbarQuickFilter } from "@mui/x-data-grid"
-export const TableGrid = ({rows, columns, loading}) => {
+export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, setPage}) => {
     function CustomToolbar() {
         return (
           <GridToolbarContainer >
@@ -34,12 +34,16 @@ export const TableGrid = ({rows, columns, loading}) => {
                     columns={columns}
                     localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                     components={{Toolbar: CustomToolbar}}
-                    autoPageSize
+                    paginationMode="server"
+                    page={page}
+                    autoHeight
+                    rowsPerPageOptions={[5]}
+                    pageSize={pageSize}
                     pagination
                     disableSelectionOnClick
                     getRowHeight={() => 'auto'}
-                    // getEstimatedRowHeight={() => 200}
-                    
+                    rowCount={rowCount}   
+                    onPageChange={(newPage) => setPage(newPage)}
                     loading={loading} 
                 />          
             </div>

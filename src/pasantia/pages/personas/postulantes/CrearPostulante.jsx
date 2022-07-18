@@ -205,7 +205,7 @@ export const CrearPostulante = () => {
         celular: Number(data.celular),
         nombre_referencia: data.nombre_referencia,
         numero_referencia: Number(data.celular_referencia),
-        tipo_postulante: data.tipo_postulante,
+        tipo_postulante: data.tipo_postulante.toUpperCase(),
         carrera: data.carrera,
         numero_anios_semestre: data.numero_anios_semestres.toUpperCase(),
         id_universidad: data.universidad.id,
@@ -355,7 +355,7 @@ export const CrearPostulante = () => {
           </Grid>
           <Grid item xs={6} sm={5} md={3} lg={2}>
             <FormControl variant="standard" fullWidth error={!!errors.expedicion}>
-              <InputLabel id="ext">Extensión</InputLabel>
+              <InputLabel id="ext">Expedición</InputLabel>
             <Controller 
               name="expedicion"
               control={control}
@@ -367,15 +367,16 @@ export const CrearPostulante = () => {
                 labelId="ext" 
                 label="Extension"
               >
-                <MenuItem value={"LP"}>La Paz</MenuItem>
-                <MenuItem value={"SC"}>Santa Cruz</MenuItem>
-                <MenuItem value={"OR"}>Oruro</MenuItem>
+                <MenuItem value={"BE"}>Beni</MenuItem>
                 <MenuItem value={"CB"}>Cochabamba</MenuItem>
+                <MenuItem value={"CH"}>Chuquisaca</MenuItem>
+                <MenuItem value={"LP"}>La Paz</MenuItem>
+                <MenuItem value={"OR"}>Oruro</MenuItem>
                 <MenuItem value={"PD"}>Pando</MenuItem>
                 <MenuItem value={"PT"}>Potosi</MenuItem>
+                <MenuItem value={"SC"}>Santa Cruz</MenuItem>
                 <MenuItem value={"TJ"}>Tarija</MenuItem>
-                <MenuItem value={"CH"}>Chuquisaca</MenuItem>
-                <MenuItem value={"BE"}>Beni</MenuItem>
+                <MenuItem value={"QR"}>QR</MenuItem>
               </Select>
               )}
               />
@@ -671,9 +672,10 @@ export const CrearPostulante = () => {
                   value={value}
                   labelId="num" 
                   label="Numero de años o semestres">
-                  <MenuItem value="4to año">4to año</MenuItem>
-                  <MenuItem value="5to año">5to año</MenuItem>
-                  <MenuItem value="Finalizado">Finalizado</MenuItem>
+                  <MenuItem value="3er AÑO">3er año</MenuItem>
+                  <MenuItem value="4to AÑO">4to año</MenuItem>
+                  <MenuItem value="5to AÑO">5to año</MenuItem>
+                  <MenuItem value="FINALIZADO">Finalizado</MenuItem>
                 </Select>
               )}
             />
@@ -697,8 +699,8 @@ export const CrearPostulante = () => {
                   onChange={(e => setModalidad(e.target.value))}
                   labelId="mod" 
                   label="Modalidad">
-                  <MenuItem value="pasantia">Pasantia</MenuItem>
-                  <MenuItem value="trabajo dirigido">Trabajo dirigido</MenuItem>
+                  <MenuItem value="PASANTIA">Pasantia</MenuItem>
+                  <MenuItem value="TRABAJO DIRIGIDO">Trabajo dirigido</MenuItem>
                 </Select>
           </FormControl>
         </Grid>

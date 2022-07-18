@@ -1,13 +1,13 @@
 import { Button, Grid } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import DashboardLayout from '../../../layouts/layoutContainers/DashboardLayout'
-import MDBox from '../../../theme/components/MDBox'
-import MDTypography from '../../../theme/components/MDTypography'
-import { TableGrid } from '../../components/Table/TableGrid'
+import DashboardLayout from '../../../../layouts/layoutContainers/DashboardLayout'
+import MDBox from '../../../../theme/components/MDBox'
+import MDTypography from '../../../../theme/components/MDTypography'
+import { TableGrid } from '../../../components/Table/TableGrid'
 import AddIcon from '@mui/icons-material/Add';
 
-export const PersonLayout = ({title, subtitle, link , buttonTitle, rows, columns, loading }) => {
+export const PersonLayout = ({title, subtitle, link , buttonTitle, rows, columns, loading, page, rowCount, pageSize, setPage }) => {
   return (
     <DashboardLayout>
         <MDBox mt={2} mb={2}>
@@ -29,7 +29,7 @@ export const PersonLayout = ({title, subtitle, link , buttonTitle, rows, columns
                 </Button>
               </Link>
             </Grid>
-            <TableGrid rows={rows} columns={columns} loading={loading}/>
+            <TableGrid rows={rows} columns={columns} loading={loading} page={page} rowCount={rowCount} pageSize={pageSize} setPage={setPage}/>
           </Grid>
         </MDBox>
     </DashboardLayout>
