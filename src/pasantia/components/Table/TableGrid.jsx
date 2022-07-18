@@ -3,7 +3,7 @@ import { DataGrid, esES, GridToolbarContainer, GridToolbarColumnsButton,
     GridToolbarFilterButton,
     GridToolbarDensitySelector,
     GridToolbarQuickFilter } from "@mui/x-data-grid"
-export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, setPage}) => {
+export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, setPage, onFilterChange}) => {
     function CustomToolbar() {
         return (
           <GridToolbarContainer >
@@ -44,7 +44,9 @@ export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, set
                     getRowHeight={() => 'auto'}
                     rowCount={rowCount}   
                     onPageChange={(newPage) => setPage(newPage)}
-                    loading={loading} 
+                    loading={loading}
+                    filterMode="server"
+                    onFilterModelChange={onFilterChange}
                 />          
             </div>
         </div>

@@ -7,7 +7,7 @@ import MDTypography from '../../../../theme/components/MDTypography'
 import { TableGrid } from '../../../components/Table/TableGrid'
 import AddIcon from '@mui/icons-material/Add';
 
-export const PersonLayout = ({title, subtitle, link , buttonTitle, rows, columns, loading, page, rowCount, pageSize, setPage }) => {
+export const PersonLayout = ({title, subtitle, link , buttonTitle, rows, columns, loading, page, rowCount, pageSize, setPage, onFilterChange }) => {
   return (
     <DashboardLayout>
         <MDBox mt={2} mb={2}>
@@ -29,7 +29,7 @@ export const PersonLayout = ({title, subtitle, link , buttonTitle, rows, columns
                 </Button>
               </Link>
             </Grid>
-            <TableGrid rows={rows} columns={columns} loading={loading} page={page} rowCount={rowCount} pageSize={pageSize} setPage={setPage}/>
+            <TableGrid rows={rows} columns={columns} loading={loading} page={page} rowCount={rowCount} pageSize={pageSize} setPage={setPage} onFilterChange={onFilterChange}/>
           </Grid>
         </MDBox>
     </DashboardLayout>

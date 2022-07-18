@@ -13,20 +13,27 @@ export const ServidoresPublicos = () => {
   const [rowCount, setRowCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [servidoresPublicos, setServidoresPublicos] = useState([])
+  const [queryOptions, setQueryOptions] = useState({})
+  const [query, setQuery] = useState("")
   const handleChange = (newPage) => {
     setPage(newPage)
   }
   useEffect(() => {
     setLoading(true);
-    apiClient.get(`/api/servidores-publicos?page=${page+1}`)
+    apiClient.get(`/api/servidores-publicos?page=${page+1}&texto=${query}`)
     .then(response => {
       setServidoresPublicos(response.data.data);
       setRowCount(response.data.total);
       setPageSize(response.data.per_page)
       setLoading(false);
     }).catch(error => console.error(error))
-  }, [page])
+  }, [page, query])
 
+  const onFilterChange = (filterModel) => {
+    setQueryOptions({filterModel: {...filterModel}})
+    setQuery(filterModel.quickFilterValues[0])
+  }
+  console.log(query)
   const getNombres = (params) => {
     return `${params.row.persona.nombres}`
   }
@@ -87,6 +94,7 @@ export const ServidoresPublicos = () => {
       columns={columns}
       loading={loading}
       setPage={handleChange}
+      onFilterChange={onFilterChange}
     />
   )
 }
