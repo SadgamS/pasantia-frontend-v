@@ -1,17 +1,12 @@
 import { Box } from "@mui/material";
 import { DataGrid, esES, GridToolbarContainer, GridToolbarColumnsButton,
-    GridToolbarFilterButton,
-    GridToolbarDensitySelector,
-    GridToolbarQuickFilter } from "@mui/x-data-grid"
-export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, setPage, onFilterChange}) => {
+    GridToolbarDensitySelector} from "@mui/x-data-grid"
+export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, setPage,}) => {
     function CustomToolbar() {
         return (
           <GridToolbarContainer >
             <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
             <GridToolbarDensitySelector /> 
-            <Box flex={1}/>
-            <GridToolbarQuickFilter />
           </GridToolbarContainer>     
         );
     }
@@ -45,8 +40,7 @@ export const TableGrid = ({rows, columns, loading, page, rowCount, pageSize, set
                     rowCount={rowCount}   
                     onPageChange={(newPage) => setPage(newPage)}
                     loading={loading}
-                    filterMode="server"
-                    onFilterModelChange={onFilterChange}
+                    disableColumnFilter   
                 />          
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import apiClient from '../../../../services/api';
 import { PersonLayout } from '../layouts/PersonLayout'
 import { GridActionsCellItem } from '@mui/x-data-grid';
@@ -7,20 +7,24 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+
 export const ServidoresPublicos = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [servidoresPublicos, setServidoresPublicos] = useState([])
-  const [queryOptions, setQueryOptions] = useState({})
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState('')
+ 
   const handleChange = (newPage) => {
     setPage(newPage)
   }
+  const handleQuery = (value) => {
+    setQuery(value)
+  }
   useEffect(() => {
     setLoading(true);
-    apiClient.get(`/api/servidores-publicos?page=${page+1}&texto=${query}`)
+    apiClient.get(`/api/servidores-publicos?page=${page+1}&search=${query}`)
     .then(response => {
       setServidoresPublicos(response.data.data);
       setRowCount(response.data.total);
@@ -29,11 +33,7 @@ export const ServidoresPublicos = () => {
     }).catch(error => console.error(error))
   }, [page, query])
 
-  const onFilterChange = (filterModel) => {
-    setQueryOptions({filterModel: {...filterModel}})
-    setQuery(filterModel.quickFilterValues[0])
-  }
-  console.log(query)
+
   const getNombres = (params) => {
     return `${params.row.persona.nombres}`
   }
@@ -49,6 +49,7 @@ export const ServidoresPublicos = () => {
   const getUnidad = (params) => {
     return `${params.row.unidad.nombre}`
   }
+
 
   const columns = [
     // { field: 'id', hide:true},
@@ -94,7 +95,8 @@ export const ServidoresPublicos = () => {
       columns={columns}
       loading={loading}
       setPage={handleChange}
-      onFilterChange={onFilterChange}
+      setQuery={handleQuery}
+      query={query}
     />
   )
 }
