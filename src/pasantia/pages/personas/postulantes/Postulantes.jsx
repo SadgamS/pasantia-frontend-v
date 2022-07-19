@@ -1,5 +1,5 @@
 import { Button, Grid } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import DashboardLayout from '../../../../layouts/layoutContainers/DashboardLayout'
 import MDBox from '../../../../theme/components/MDBox'
 
@@ -13,6 +13,9 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
+import debounceFunction from '../../../../helpers/debounceFunction';
+import { PersonLayout } from '../layouts/PersonLayout';
+import apiClient from '../../../../services/api';
 
 
 export const Postulantes = () => {
@@ -21,18 +24,37 @@ export const Postulantes = () => {
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
+  const [query, setQuery] = useState('');
+
   const handleChange = (newPage) => {
       setPage(newPage)
     }
-  useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/postulantes?page=${page+1}`)
-    .then(response => {
-      setPostulantes(response.data.data);
-      setRowCount(response.data.total);
-      setPageSize(response.data.per_page)
-      setLoading(false);
-    }).catch(error => console.error(error))
-  }, [page])
+
+    const handleQuery = (value) => {
+      setQuery(value);
+    };
+  
+
+    const debounceFetchData = useMemo(() => {
+      const fetchData = async (page, query) => {
+        try {
+          const response = await apiClient.get(
+            `api/postulantes?page=${page+1}&search=${query}`,
+          );
+          setPostulantes(response.data.data);
+          setRowCount(response.data.total);
+          setPageSize(response.data.per_page);
+          setLoading(false);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      return debounceFunction(fetchData, 250);
+    }, []);
+    useEffect(() => {
+      setLoading(true);
+      debounceFetchData(page, query);
+    }, [page, query]);
 
   const getNombres = (params) => {
     return `${params.row.persona.nombres}`
@@ -85,29 +107,20 @@ export const Postulantes = () => {
   ];
 
   return (
-    <DashboardLayout>
-        <MDBox mt={2} mb={2}>
-          <Grid container >
-            <Grid container justifyContent='center' mt={2}>
-              <Grid item textAlign='center'>
-                <MDTypography variant='h4'>
-                  Postulantes
-                </MDTypography>
-                <MDTypography variant='subtitle2'>
-                  Página de los postulantes a pasantias
-                </MDTypography>
-              </Grid>
-            </Grid>
-            <Grid item mt={2}>
-              <Link to={'/postulantes/crear-postulante'}>
-                <Button sx={{fontSize: 'small'}} variant='contained' startIcon={<AddIcon />}>
-                  Agregar postulante
-                </Button>
-              </Link>
-            </Grid>
-            <TableGrid rows={postulantes} columns={columns} loading={loading}  page={page} pageSize={pageSize} rowCount={rowCount} setPage={handleChange}/>
-          </Grid>
-        </MDBox>
-    </DashboardLayout>
+    <PersonLayout
+      title="Postulantes"
+      subtitle="Página de los postulantes a pasantias"
+      link="/postulantes/crear-postulante"
+      buttonTitle="Agregar postulante"
+      rows={postulantes}
+      page={page}
+      pageSize={pageSize}
+      rowCount={rowCount}
+      columns={columns}
+      loading={loading}
+      setPage={handleChange}
+      setQuery={handleQuery}
+      query={query}
+    />
   )
 }

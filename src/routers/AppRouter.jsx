@@ -1,26 +1,52 @@
-import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { LoginPage } from '../auth/pages/LoginPage'
-import Home from '../pasantia/pages/home/Home'
-import { ServidoresPublicos } from '../pasantia/pages/personas/servidores_publicos/ServidoresPublicos'
-import { CrearPostulante } from '../pasantia/pages/personas/postulantes/CrearPostulante'
-import { Postulantes } from '../pasantia/pages/personas/postulantes/Postulantes'
-import { CrearUsuario } from '../pasantia/pages/usuarios/CrearUsuario'
-import { Usuarios } from '../pasantia/pages/usuarios/Usuarios'
+import React from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { LoginPage } from '../auth/pages/LoginPage';
+import { CrearPostulante } from '../pasantia/pages/personas/postulantes/CrearPostulante';
+import { CrearServidorPublico } from '../pasantia/pages/personas/servidores_publicos/CrearServidorPublico';
+import { CrearUsuario } from '../pasantia/pages/usuarios/CrearUsuario';
 
+import routes from './routes';
 const AppRouter = () => {
-  return (
-        <Routes>
-            <Route index path='/inicio' element={<Home />} />
-            <Route path='/usuarios' element={<Usuarios />} />
-            <Route path='/usuarios/crear-usuario' element={<CrearUsuario />} />
-            <Route path='/postulantes' element={<Postulantes />} />
-            <Route path='/postulantes/crear-postulante' element={<CrearPostulante />} />
-            <Route path='/servidores-publicos' element={<ServidoresPublicos/>} />
-            <Route path='/auth/login' element={<LoginPage/>}/>
-            <Route path="*" element={<Navigate to="/inicio" />} />
-        </Routes>
-  )
-}
+  const getRoutes = (allRoutes) =>
+    allRoutes.map((route) => {
+      if (route.type === 'subcollapse') {
+        return getRoutes(route.items);
+      }
+      if (route.collapse) {
+        return getRoutes(route.collapse);
+      }
 
-export default AppRouter
+      if (route.route) {
+        return (
+          <Route
+            exact
+            path={route.route}
+            element={route.component}
+            key={route.key}
+          />
+        );
+      }
+
+      return null;
+    });
+  return (
+    <Routes>
+      {/*Rutas que se muestran en el menu (Sidenav) */}
+      {getRoutes(routes)}
+      {/* Rutas que no estan en el Menu (Sidenav) */}
+      <Route path="/usuarios/crear-usuario" element={<CrearUsuario />} />
+      <Route
+        path="/postulantes/crear-postulante"
+        element={<CrearPostulante />}
+      />
+      <Route
+        path="/servidores-publicos/crear-servidor-publico"
+        element={<CrearServidorPublico />}
+      />
+      <Route path="/auth/login" element={<LoginPage />} />
+      <Route path="*" element={<Navigate to="/inicio" />} />
+    </Routes>
+  );
+};
+
+export default AppRouter;

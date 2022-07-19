@@ -1,0 +1,15 @@
+export const defaultValuesPersonales={
+    nombres: '',
+    primer_apellido: '',
+    segundo_apellido: '',
+    ci: '',
+    expedicion: '',
+    fecha_nacimiento: null,
+    genero: '',
+    domicilio: '',
+    ciudad: '',
+    correo: '',
+    celular: '',
+    nombre_referencia: '',
+    celular_referencia: '',
+  }
