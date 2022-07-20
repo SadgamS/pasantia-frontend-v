@@ -5,6 +5,7 @@ import { collapseIcon, collapseIconBox, collapseItem, collapseText } from "./sty
 import { CustomTheme } from "../../../theme/context/themeContext";
 
 export const SidenavCollapse = ({ icon, name, active, ...rest}) => {
+  
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = useContext( CustomTheme );
   return (
     <ListItem component="li">

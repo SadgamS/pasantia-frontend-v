@@ -1,107 +1,105 @@
-
-
 function navbar(theme, ownerState) {
-    const { palette, boxShadows ,functions, transitions ,breakpoints, borders} = theme;
-    const { transparentNavbar, absolute, light, darkMode } = ownerState;
+  const { palette, boxShadows, functions, transitions, breakpoints, borders } =
+    theme;
+  const { transparentNavbar, darkMode, light } = ownerState;
 
-    const { dark, white, text, transparent, background } = palette;
-    const { navbarBoxShadow } = boxShadows;
-    const { rgba, pxToRem } = functions;
-    const { borderRadius } = borders;
+  const { dark, white, text, transparent, background } = palette;
+  const { navbarBoxShadow } = boxShadows;
+  const { rgba, pxToRem } = functions;
+  const { borderRadius } = borders;
 
-    return {
+  return {
+    boxShadow: transparentNavbar ? 'none' : navbarBoxShadow,
+    backdropFilter: transparentNavbar
+      ? 'none'
+      : `saturate(200%) blur(${pxToRem(30)})`,
+    backgroundColor: transparentNavbar
+      ? `${transparent.main} !important`
+      : rgba(darkMode ? background.default : white.main, 0.8),
 
-        boxShadow: transparentNavbar || absolute ? "none" : navbarBoxShadow,
-        backdropFilter: transparentNavbar || absolute ? "none" : `saturate(200%) blur(${pxToRem(30)})`,
-        backgroundColor:
-        transparentNavbar || absolute
-          ? `${transparent.main} !important`
-          : rgba(darkMode ? background.default : white.main, 0.8),
+    color: () => {
+      let color;
 
-          color: () => {
-            let color;
-      
-            if (light) {
-              color = white.main;
-            } else if (transparentNavbar) {
-              color = text.main;
-            } else {
-              color = dark;
-            }
-      
-            return color;
-          },
-          
-        top: absolute ? 0 : pxToRem(12),
-        minHeight: pxToRem(75),
-        borderRadius: borderRadius.xl,
-        paddingTop: pxToRem(8),
-        paddingBottom:pxToRem(8),
-        paddingRight: absolute ? pxToRem(8) : 0,
-        paddingLeft: absolute ? pxToRem(16) : 0,
-        display: 'grid',
-        alignItems: 'center',
+      if (light) {
+        color = white.main;
+      } else if (transparentNavbar) {
+        color = text.main;
+      } else {
+        color = dark.main;
+      }
 
-        "& > *": {
-            transition: transitions.create("all", {
-              easing: transitions.easing.easeInOut,
-              duration: transitions.duration.standard,
-            }),
-          },
+      return color;
+    },
 
-        '& .MuiToolbar-root':{
-          display: 'flex',
-          justifyContent:'space-between',
-          alignItems: 'center',
-          
-          [breakpoints.up("sm")]: {
-            minHeight: "auto",
-            padding: `${pxToRem(4)} ${pxToRem(16)}`,
-          },
-        }
-    }
+    top: pxToRem(12),
+    minHeight: pxToRem(75),
+    borderRadius: borderRadius.xl,
+    paddingTop: pxToRem(8),
+    paddingBottom: pxToRem(8),
+    paddingRight: pxToRem(8),
+    paddingLeft: pxToRem(16),
+    display: 'grid',
+    alignItems: 'center',
+
+    '& > *': {
+      transition: transitions.create('all', {
+        easing: transitions.easing.easeInOut,
+        duration: transitions.duration.standard,
+      }),
+    },
+
+    '& .MuiToolbar-root': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+
+      [breakpoints.up('sm')]: {
+        minHeight: 'auto',
+        padding: `${pxToRem(4)} ${pxToRem(8)}`,
+      },
+    },
+  };
 }
 
 const navbarContainer = ({ breakpoints }) => ({
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    pt: 0.5,
-    pb: 0.5,
-  
-    [breakpoints.up("md")]: {
-      flexDirection: "row",
-      alignItems: "center",
-      paddingTop: "0",
-      paddingBottom: "0",
-    },
-});
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  pt: 0.5,
+  pb: 0.5,
 
-const navbarRow = ({ breakpoints }, { isMini }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-  
-    [breakpoints.up("md")]: {
-      justifyContent: isMini ? "space-between" : "stretch",
-      width: isMini ? "100%" : "max-content",
-    },
-  
-    [breakpoints.up("xl")]: {
-      justifyContent: "stretch !important",
-      width: "max-content !important",
-    },
-});
-
-const navbarMobileMenu = ({ breakpoints }) => ({
-  display: "inline-block",
-  lineHeight: 0,
-
-  [breakpoints.up("xl")]: {
-    display: "none",
+  [breakpoints.up('md')]: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: '0',
+    paddingBottom: '0',
   },
 });
 
+const navbarRow = ({ breakpoints }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
 
-export {navbar, navbarContainer, navbarRow, navbarMobileMenu}
+  [breakpoints.up('md')]: {
+    justifyContent: 'stretch',
+    width: 'max-content',
+  },
+
+  [breakpoints.up('xl')]: {
+    justifyContent: 'stretch !important',
+    width: 'max-content !important',
+  },
+});
+
+const navbarMobileMenu = ({ breakpoints }) => ({
+  display: 'inline-block',
+  lineHeight: 0,
+
+  [breakpoints.up('xl')]: {
+    display: 'none',
+  },
+});
+
+export { navbar, navbarContainer, navbarRow, navbarMobileMenu };

@@ -18,14 +18,14 @@ const sidenav = {
     paper: {
       width: pxToRem(250),
       backgroundColor: white.main,
-      height: `calc(100vh - ${pxToRem(32)})`,
-      margin: pxToRem(16),
-      borderRadius: borderRadius.xl,
-      border: "none",
+      // height: `calc(100vh - ${pxToRem(32)})`,
+      // margin: pxToRem(1),
+      // borderRadius: borderRadius.xl,
+      // border: "none",
     },
 
     paperAnchorDockedLeft: {
-      borderRight: "none",
+      // borderRight: "none",
     },
   },
 };

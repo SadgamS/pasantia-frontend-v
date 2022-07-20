@@ -11,7 +11,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-import { AppBar, Box, IconButton, Menu, Toolbar } from '@mui/material'
+import { AppBar, Box, IconButton, Menu, Toolbar } from '@mui/material';
 
 import { navbar, navbarContainer, navbarMobileMenu, navbarRow } from './styles';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
@@ -20,35 +20,47 @@ import MDBox from '../../../theme/components/MDBox';
 
 import { CustomTheme } from '../../../theme/context/themeContext';
 
-export const Navbar = ({ absolute, light, isMini}) => {
+export const Navbar = ({ light }) => {
   const [navbarType, setNavbarType] = useState();
-  const route = useLocation().pathname.split("/").slice(1);
-  const { setTransparentNavbar, setMiniSidenav,setOpenConfigurator,setDarkMode,miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = useContext( CustomTheme );
+  const route = useLocation().pathname.split('/').slice(1);
+  const {
+    setTransparentNavbar,
+    setMiniSidenav,
+    setOpenConfigurator,
+    setDarkMode,
+    miniSidenav,
+    transparentNavbar,
+    fixedNavbar,
+    openConfigurator,
+    darkMode,
+  } = useContext(CustomTheme);
   const [openMenu, setOpenMenu] = useState(false);
 
   useEffect(() => {
     // Setting the navbar type
     if (fixedNavbar) {
-      setNavbarType("sticky");
+      setNavbarType('sticky');
     } else {
-      setNavbarType("static");
+      setNavbarType('static');
     }
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
-      setTransparentNavbar((fixedNavbar && window.scrollY === 0) || !fixedNavbar);
+      setTransparentNavbar(
+        (fixedNavbar && window.scrollY === 0) || !fixedNavbar,
+      );
     }
-    
+
     /** 
      The event listener that's calling the handleTransparentNavbar function when 
      scrolling the window.
      */
-    window.addEventListener("scroll", handleTransparentNavbar);
-    
+    window.addEventListener('scroll', handleTransparentNavbar);
+
     // Call the handleTransparentNavbar function to set the state with the initial value.
     // handleTransparentNavbar();
-    
+
     // Remove event listener on cleanup
-    return () => window.removeEventListener("scroll", handleTransparentNavbar);
+    return () => window.removeEventListener('scroll', handleTransparentNavbar);
   }, [fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(!miniSidenav);
@@ -61,8 +73,8 @@ export const Navbar = ({ absolute, light, isMini}) => {
       anchorEl={openMenu}
       anchorReference={null}
       anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "left",
+        vertical: 'bottom',
+        horizontal: 'left',
       }}
       open={Boolean(openMenu)}
       onClose={handleCloseMenu}
@@ -73,24 +85,24 @@ export const Navbar = ({ absolute, light, isMini}) => {
     </Menu>
   );
 
-   // Change DarkMode or LightMode
-   const handleDarkMode = () => {
+  // Change DarkMode or LightMode
+  const handleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
   return (
     <AppBar
-      position={absolute ? 'absolute' : navbarType}
-      color='inherit'
-      sx={(theme) => navbar(theme, { transparentNavbar, absolute, light, darkMode })}
+      position={navbarType}
+      color="inherit"
+      sx={(theme) => navbar(theme, { transparentNavbar, light, darkMode })}
     >
-        <Toolbar sx={(theme) => navbarContainer(theme)}>
-            <MDBox 
-              color= "inherit"
-              mb={{xs:1, md:0}}
-              sx={(theme) => navbarRow(theme, { isMini })}
-            >
-              {/* <Box
+      <Toolbar sx={(theme) => navbarContainer(theme)}>
+        <MDBox
+          color="inherit"
+          mb={{ xs: 1, md: 0 }}
+          sx={(theme) => navbarRow(theme)}
+        >
+          {/* <Box
                 display={{ xs: "none", xl: "block" }}   
                 sx={{pr: 1}}   
               >
@@ -98,53 +110,44 @@ export const Navbar = ({ absolute, light, isMini}) => {
                     {miniSidenav ? <MenuOpenIcon /> : <MenuIcon /> }
                   </IconButton>
               </Box> */}
-              <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
-            </MDBox>
-            {isMini ? null: ( 
-              <Box sx={(theme) => navbarRow(theme, {})}>
-                <Box pr={1}>
-                </Box>
-                <MDBox color={ light ? "white" : "inherit"} >
-                  <IconButton 
-                    color="inherit"
-                    sx={navbarMobileMenu}
-                    onClick={handleMiniSidenav}
-                  >
-                    {miniSidenav ? <MenuOpenIcon /> : <MenuIcon /> }
-                  </IconButton>
-                  <IconButton 
-                    color="inherit" 
-                    onClick={handleDarkMode}
-                  >
-                    {darkMode ? <Brightness7Icon /> : <Brightness4Icon />} 
-                  </IconButton>
-                  <IconButton 
-                    color="inherit"        
-                    onClick={handleConfiguratorOpen}
-                  >
-                    <SettingsIcon /> 
-                  </IconButton>
-                  <IconButton 
-                    color="inherit"
-                    aria-controls="notification-menu"
-                    aria-haspopup="true"
-                    onClick={handleOpenMenu}
-                  >
-                    <AccountCircleIcon /> 
-                  </IconButton>
-                  {renderMenu()}
-                </MDBox>
-            </Box>)}
-           
-        </Toolbar>
-
+          <Breadcrumbs
+            icon="home"
+            title={route[route.length - 1]}
+            route={route}
+            light={light}
+          />
+        </MDBox>
+        <Box sx={(theme) => navbarRow(theme)}>
+          <Box pr={1}></Box>
+          <MDBox color={'inherit'}>
+            <IconButton
+              color="inherit"
+              sx={navbarMobileMenu}
+              onClick={handleMiniSidenav}
+            >
+              {miniSidenav ? <MenuOpenIcon /> : <MenuIcon />}
+            </IconButton>
+            <IconButton color="inherit" onClick={handleDarkMode}>
+              {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+            <IconButton color="inherit" onClick={handleConfiguratorOpen}>
+              <SettingsIcon />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              aria-controls="notification-menu"
+              aria-haspopup="true"
+              onClick={handleOpenMenu}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+            {renderMenu()}
+          </MDBox>
+        </Box>
+      </Toolbar>
     </AppBar>
-  )
-}
-
-// Setting default values for the props of DashboardNavbar
+  );
+};
 Navbar.defaultProps = {
-  absolute: false,
   light: false,
-  isMini: false,
 };

@@ -31,6 +31,8 @@ import pxToRem from "./functions/pxToRem";
 import rgba from "./functions/rgba";
 
 import { esES } from "@mui/material/locale";
+import icon from "./components/icon";
+import svgIcon from "./components/svgIcon";
 
 export default createTheme({
     breakpoints: {...breakpoints},
@@ -68,7 +70,9 @@ export default createTheme({
         MuiMenuItem: { ...menuItem },
         MuiRadio: { ...radio },
         MuiFormControlLabel: { ...formControlLabel },
-        MuiFormLabel: { ...formLabel }
+        MuiFormLabel: { ...formLabel },
+        MuiIcon: { ...icon },
+        MuiSvgIcon: { ...svgIcon },
     },
     },
     esES,

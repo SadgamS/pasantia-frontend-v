@@ -1,31 +1,30 @@
-import { Box } from "@mui/material";
-import { useEffect, useContext } from "react";
+import { Box } from '@mui/material';
+import { useEffect, useContext } from 'react';
 
 // react-router-dom components
-import { useLocation } from "react-router-dom";
-import { Navbar } from "../../pasantia/components/Navbar/Navbar";
-import { Sidenav } from "../../pasantia/components/Sidenav/Sidenav";
-
+import { useLocation } from 'react-router-dom';
+import { Navbar } from '../../pasantia/components/Navbar/Navbar';
+import { Sidenav } from '../../pasantia/components/Sidenav/Sidenav';
 
 // Material Dashboard 2 React context
-import { CustomTheme } from "../../theme/context/themeContext";
+import { CustomTheme } from '../../theme/context/themeContext';
 
 const DashboardLayout = ({ children }) => {
-  const { setLayout, miniSidenav } = useContext( CustomTheme );
+  const { setLayout, miniSidenav } = useContext(CustomTheme);
   const { pathname } = useLocation();
 
   useEffect(() => {
-    setLayout("dashboard");
+    setLayout('dashboard');
   }, [pathname]);
   return (
     <Box
       sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
-        p: 3,
-        position: "relative",
+        p: 2.5,
+        position: 'relative',
 
-        [breakpoints.up("xl")]: {
-          marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
-          transition: transitions.create(["margin-left", "margin-right"], {
+        [breakpoints.up('xl')]: {
+          marginLeft: miniSidenav ? pxToRem(120) : pxToRem(255),
+          transition: transitions.create(['margin-left', 'margin-right'], {
             easing: transitions.easing.easeInOut,
             duration: transitions.duration.standard,
           }),
@@ -36,10 +35,7 @@ const DashboardLayout = ({ children }) => {
       <Navbar />
       {children}
     </Box>
-  )
-}
+  );
+};
 
-
-
-
-export default DashboardLayout
+export default DashboardLayout;
