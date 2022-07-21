@@ -88,7 +88,7 @@ export const Sidenav = ({ ...rest }) => {
       variant="permanent"
       ownerState={{ transparentSidenav, whiteSidenav, miniSidenav, darkMode }}
     >
-      <MDBox pt={5} pd={1} px={4} textAlign="center">
+      <MDBox pt={3} pd={1} px={4} textAlign="center">
         <MDBox
           display={{ xs: 'block', xl: 'none' }}
           position="absolute"

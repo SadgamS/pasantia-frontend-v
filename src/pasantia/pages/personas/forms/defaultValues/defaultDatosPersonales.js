@@ -1,7 +1,6 @@
 export const defaultValuesPersonales={
     nombres: '',
-    primer_apellido: '',
-    segundo_apellido: '',
+    apellidos: '',
     ci: '',
     expedicion: '',
     fecha_nacimiento: null,

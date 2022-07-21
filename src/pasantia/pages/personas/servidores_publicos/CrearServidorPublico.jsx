@@ -9,7 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { LoadingButton } from '@mui/lab';
 import { defaultValuesPersonales } from '../forms/defaultValues/defaultDatosPersonales';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { schema } from '../forms/validations/validationPersona';
+import { schema } from '../forms/validations/validationServidorPublico';
 import apiClient from '../../../../services/api';
 
 export const CrearServidorPublico = () => {
@@ -40,9 +40,9 @@ export const CrearServidorPublico = () => {
    }
   return (
     <FormLayout>
-      <Grid container mt={1}>
-        <Grid item>
-          <MDTypography variant="h5" fontWeight="bold">
+      <Grid container mt={1} justifyContent="center">
+        <Grid item >
+          <MDTypography variant="h6" color="secondary" fontWeight="bold" textTransform="uppercase">
             Añadir a un nuevo Servidor publico
           </MDTypography>
         </Grid>

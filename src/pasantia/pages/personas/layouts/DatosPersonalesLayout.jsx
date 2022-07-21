@@ -12,7 +12,7 @@ export const DatosPersonalesLayout = ({control, errors}) => {
     <>
      <Grid container mt={2}>
         <Grid item>
-          <MDTypography variant="subtitle2" fontWeight="regular" color="info">
+          <MDTypography variant="subtitle2" fontWeight="medium" color="primary">
             Datos Personales
           </MDTypography>
         </Grid>
@@ -30,10 +30,7 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 onChange={(e) => onChange(e.target.value.toUpperCase())}
                 onBlur={onBlur}
                 value={value}
-                variant="standard"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                variant="outlined"
                 error={!!error}
                 helperText={error ? error.message : null}
                 label="Nombres"
@@ -45,7 +42,7 @@ export const DatosPersonalesLayout = ({control, errors}) => {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={4}>
           <Controller
-            name="primer_apellido"
+            name="apellidos"
             control={control}
             render={({
               field: { onChange, value, onBlur },
@@ -55,47 +52,17 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 onChange={(e) => onChange(e.target.value.toUpperCase())}
                 value={value}
                 onBlur={onBlur}
-                variant="standard"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                variant="outlined"
                 error={!!error}
                 helperText={error ? error.message : null}
-                label="Primer apellido"
+                label="Apellidos"
                 autoComplete="off"
                 fullWidth
               />
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={4}>
-          <Controller
-            name="segundo_apellido"
-            control={control}
-            render={({
-              field: { onChange, value, onBlur },
-              fieldState: { error },
-            }) => (
-              <TextField
-                onChange={(e) => onChange(e.target.value.toUpperCase())}
-                value={value}
-                onBlur={onBlur}
-                variant="standard"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                error={!!error}
-                helperText={error ? error.message : null}
-                label="Segundo apellido"
-                autoComplete="off"
-                fullWidth
-              />
-            )}
-          />
-        </Grid>
-      </Grid>
-      <Grid container mt={0} spacing={2} p={1}>
-        <Grid item xs={6} sm={7} md={5} lg={3}>
+        <Grid item xs={6} sm={3} md={3} lg={2}>
           <Controller
             name="ci"
             control={control}
@@ -107,20 +74,17 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 onChange={(e) => onChange(e.target.value.toUpperCase())}
                 value={value}
                 onBlur={onBlur}
-                variant="standard"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                variant="outlined"
                 error={!!error}
                 helperText={error ? error.message : null}
-                label="Carnet de identidad"
+                label="Numero de C.I."
                 autoComplete="off"
                 fullWidth
               />
             )}
           />
         </Grid>
-        <Grid item xs={6} sm={5} md={3} lg={2}>
+        <Grid item xs={6} sm={3} md={3} lg={2}>
           <FormControl variant="standard" fullWidth error={!!errors.expedicion}>
             <InputLabel id="ext">Expedición</InputLabel>
             <Controller
@@ -143,7 +107,7 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                   <MenuItem value={'PT'}>Potosi</MenuItem>
                   <MenuItem value={'SC'}>Santa Cruz</MenuItem>
                   <MenuItem value={'TJ'}>Tarija</MenuItem>
-                  <MenuItem value={'QR'}>QR</MenuItem>
+                  <MenuItem value={'QR'}>(Sin expedición)QR</MenuItem>
                 </Select>
               )}
             />
@@ -152,7 +116,10 @@ export const DatosPersonalesLayout = ({control, errors}) => {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item xs={8} sm={5} md={4} lg={3}>
+      </Grid>
+      <Grid container mt={0} spacing={2} p={1}>
+        
+        <Grid item xs={8} sm={4} md={3} lg={2}>
           <LocalizationProvider adapterLocale={es} dateAdapter={AdapterDateFns}>
             <Controller
               name="fecha_nacimiento"
@@ -189,7 +156,7 @@ export const DatosPersonalesLayout = ({control, errors}) => {
           item
           xs={12}
           sm={7}
-          md={5}
+          md={4}
           lg={4}
           sx={{ mt: { xs: -1, sm: -1, md: -1, lg: -2 } }}
         >
@@ -224,9 +191,7 @@ export const DatosPersonalesLayout = ({control, errors}) => {
             </FormHelperText>
           </FormControl>
         </Grid>
-      </Grid>
-      <Grid container mt={0} spacing={2} p={1}>
-        <Grid item xs={12} sm={7} md={5} lg={5}>
+        <Grid item xs={12} sm={8} md={5} lg={6}>
           <Controller
             name="domicilio"
             control={control}
@@ -241,18 +206,17 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 error={!!error}
                 placeholder="Calle Numero Zona"
                 helperText={error ? error.message : null}
-                variant="standard"
+                variant="outlined"
                 label="Domicilio"
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 fullWidth
                 autoComplete="off"
               />
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={5} md={3} lg={3}>
+      </Grid>
+      <Grid container mt={0} spacing={2} p={1}>
+        <Grid item xs={12} sm={6} md={3} lg={3}>
           <Controller
             name="ciudad"
             control={control}
@@ -261,23 +225,20 @@ export const DatosPersonalesLayout = ({control, errors}) => {
               fieldState: { error },
             }) => (
               <TextField
-                variant="standard"
+                variant="outlined"
                 label="Ciudad de residencia"
                 value={value}
                 onChange={(e) => onChange(e.target.value.toUpperCase())}
                 onBlur={onBlur}
                 error={!!error}
                 helperText={error ? error.message : null}
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 autoComplete="off"
                 fullWidth
               />
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={4}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <Controller
             name="correo"
             control={control}
@@ -291,21 +252,16 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 onBlur={onBlur}
                 error={!!error}
                 helperText={error ? error.message : null}
-                variant="standard"
+                variant="outlined"
                 type="email"
                 label="Correo"
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 fullWidth
                 autoComplete="off"
               />
             )}
           />
         </Grid>
-      </Grid>
-      <Grid container mt={0} spacing={2} p={1}>
-        <Grid item xs={12} sm={4} md={3} lg={3}>
+        <Grid item xs={12} sm={4} md={3} lg={2}>
           <Controller
             name="celular"
             control={control}
@@ -319,11 +275,8 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 onBlur={onBlur}
                 error={!!error}
                 helperText={error ? error.message : null}
-                variant="standard"
+                variant="outlined"
                 label="Celular"
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 fullWidth
                 autoComplete="off"
                 type="tel"
@@ -331,7 +284,9 @@ export const DatosPersonalesLayout = ({control, errors}) => {
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={8} md={6} lg={6}>
+      </Grid>
+      <Grid container mt={0} spacing={2} p={1}>
+        <Grid item xs={12} sm={8} md={6} lg={4.5}>
           <Controller
             name="nombre_referencia"
             control={control}
@@ -345,18 +300,15 @@ export const DatosPersonalesLayout = ({control, errors}) => {
                 onBlur={onBlur}
                 error={!!error}
                 helperText={error ? error.message : null}
-                variant="standard"
-                label="Nombre completo de un familiar de referencia"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                variant="outlined"
+                label="Nombre completo de un familiar de ref."
                 fullWidth
                 autoComplete="off"
               />
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={5} md={3} lg={3}>
+        <Grid item xs={12} sm={4} md={3} lg={2.3}>
           <Controller
             name="celular_referencia"
             control={control}
@@ -365,16 +317,13 @@ export const DatosPersonalesLayout = ({control, errors}) => {
               fieldState: { error },
             }) => (
               <TextField
-                variant="standard"
+                variant="outlined"
                 value={value}
                 onChange={onChange}
                 onBlur={onBlur}
                 error={!!error}
                 helperText={error ? error.message : null}
-                label="Celular de referencia"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                label="Celular de ref."
                 fullWidth
                 autoComplete="off"
                 type="tel"

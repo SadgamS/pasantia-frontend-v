@@ -8,12 +8,12 @@
 const colors = {
   mode: "light",
   background: {
-    default: "#f0f2f5",
+    default: "#e9f0f5",
   },
 
   text: {
-    main: "#7b809a",
-    focus: "#7b809a",
+    main: "#0d1c2b",
+    focus: "#0d1c2b",
   },
 
   transparent: {
@@ -32,17 +32,15 @@ const colors = {
   },
 
   primary: {
-    // main: "#e91e63",
-    // focus: "#e91e63",
-    main: "#2196f3",
-    focus: "#4dabf5",
+    main: "#143b82",
+    focus: "#11326e",
     // main: "#1A73E8",
     // focus: "#1662C4",
   },
 
   secondary: {
-    main: "#e91e63",
-    focus: "#e91e63",
+    main: "#0d3859",
+    focus: "#0a2a43",
   },
 
   tertiary:{
@@ -76,8 +74,8 @@ const colors = {
   },
 
   dark: {
-    main: "#344767",
-    focus: "#2c3c58",
+    main: "#040406",
+    focus: "#030304",
   },
 
   grey: {
@@ -135,15 +133,15 @@ const colors = {
       state: "#191919",
     },
     blue:{
-      main: "#121F3D",
-      state: "#203862"
+      main: "#143b82",
+      state: "#0d2556"
     }
   },
   
   badgeColors: {
     primary: {
-      background: "#f8b3ca",
-      text: "#cc084b",
+      background: "#153c84",
+      text: "#0d3859",
     },
 
     secondary: {
@@ -193,7 +191,7 @@ const colors = {
     dark: "#404040",
   },
 
-  inputBorderColor: "#7eb3f7",
+  inputBorderColor: "#121F3D",
 
   tabs: {
     indicator: { boxShadow: "#ddd" },
