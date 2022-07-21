@@ -28,9 +28,9 @@ export const Sidenav = ({ ...rest }) => {
 
   let textColor = 'white';
 
-  if (transparentSidenav || (whiteSidenav && !darkMode)) {
+  if (transparentSidenav || (whiteSidenav &&  !darkMode)) {
     textColor = 'dark';
-  } else if (whiteSidenav && darkMode) {
+  } else if (whiteSidenav &&  darkMode) {
     textColor = 'inherit';
   }
 

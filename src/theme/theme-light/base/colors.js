@@ -104,6 +104,8 @@ const colors = {
     },
 
     info: {
+      // main: "#065AA1",
+      // state: "#098dd7",
       main: "#49a3f1",
       state: "#1A73E8",
     },
@@ -132,6 +134,10 @@ const colors = {
       main: "#42424a",
       state: "#191919",
     },
+    blue:{
+      main: "#121F3D",
+      state: "#203862"
+    }
   },
   
   badgeColors: {

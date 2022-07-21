@@ -44,23 +44,23 @@ export const Navbar = ({ light }) => {
       setNavbarType('static');
     }
     // A function that sets the transparent state of the navbar.
-    function handleTransparentNavbar() {
-      setTransparentNavbar(
-        (fixedNavbar && window.scrollY === 0) || !fixedNavbar,
-      );
-    }
+    // function handleTransparentNavbar() {
+    //   setTransparentNavbar(
+    //     (fixedNavbar && window.scrollY === 0) || !fixedNavbar,
+    //   );
+    // }
 
     /** 
      The event listener that's calling the handleTransparentNavbar function when 
      scrolling the window.
      */
-    window.addEventListener('scroll', handleTransparentNavbar);
+    // window.addEventListener('scroll', handleTransparentNavbar);
 
     // Call the handleTransparentNavbar function to set the state with the initial value.
     // handleTransparentNavbar();
 
     // Remove event listener on cleanup
-    return () => window.removeEventListener('scroll', handleTransparentNavbar);
+    // return () => window.removeEventListener('scroll', handleTransparentNavbar);
   }, [fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(!miniSidenav);

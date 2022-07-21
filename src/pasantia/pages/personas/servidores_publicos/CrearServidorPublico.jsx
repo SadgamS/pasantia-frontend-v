@@ -147,7 +147,7 @@ export const CrearServidorPublico = () => {
               color="info"
               variant="outlined"
               loading={loading}
-              startIcon={<SaveIcon />}
+              startIcon={<SaveIcon fontSize='medium'/>}
               >
               Guardar
             </LoadingButton>

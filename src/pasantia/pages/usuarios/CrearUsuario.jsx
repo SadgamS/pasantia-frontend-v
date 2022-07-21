@@ -1,4 +1,4 @@
-import { Alert, Autocomplete, Button, Card, Grid, Stack, TextField } from '@mui/material'
+import { Alert, Autocomplete, Button, Card, CircularProgress, Grid, Icon, Stack, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../../layouts/layoutContainers/DashboardLayout'
 import MDTypography from '../../../theme/components/MDTypography'
@@ -13,24 +13,50 @@ import { useForm, Controller } from "react-hook-form";
 import { Box } from '@mui/system'
 import { Link, useNavigate } from 'react-router-dom'
 import { FormLayout } from '../../../layouts/FormLayout'
+import apiClient from '../../../services/api'
+import { useMemo } from 'react'
+import debounceFunction from '../../../helpers/debounceFunction'
 
 export const CrearUsuario = () => {
   const [personas, setPersonas] = useState([]);
   const [rols, setRols] = useState([]);
   const [rol, setRol] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/personas/users')
-    .then((response) => {
-       setPersonas(response.data)
-    });
+    // axios.get('http://127.0.0.1:8000/api/personas/users')
+    // .then((response) => {
+    //    setPersonas(response.data)
+    // });
 
     axios.get('http://127.0.0.1:8000/api/rols')
     .then((response) => {
        setRols([...response.data])
     });
   }, [])
+
+  const getPersonas = useMemo(()=>{
+    const fetchData = async (query) => {
+      setLoading(true);
+      try {
+        const response = await apiClient.get('/api/personas/users?search'+query);
+        setPersonas([...response.data]);
+        setLoading(false);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    return debounceFunction(fetchData, 250);
+  }, [])
+  
+  useEffect(() => {
+    setLoading(true);
+    getPersonas(query);
+  }, [query])
+  
 
   // useEffect(() =>{
   //   let active =true;
@@ -89,6 +115,7 @@ export const CrearUsuario = () => {
           <Grid item xs={12} sm={5} md={5} >
             <Autocomplete 
               id='people'
+              freeSolo
               onChange={(e,newValue) => { 
                 if (newValue != undefined) {
                   setValue('Usuario', newValue.ci)
@@ -101,9 +128,33 @@ export const CrearUsuario = () => {
                 }
               }}
               options={personas}
-              getOptionLabel={(option) => (option.primer_nombre+' '+option.apellido_paterno)}
+              loading={loading}
+              onInputChange={(e, newValue) => setQuery(newValue)}
+              getOptionLabel={(option) => (option.nombres+' '+option.primer_apellido+' '+option.segundo_apellido)}
               isOptionEqualToValue={(option, value) => option.id === value.id}
-              renderInput={(params) => <TextField {...params} variant="standard" label="Personas"/>}
+              renderInput={(params) => (
+                <TextField 
+                {...params} 
+                variant="standard" 
+                label="Buscar personas..."
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: (
+                    <>
+                      {<Icon color='inherit' fontSize='small'>search</Icon>}
+                      {params.InputProps.startAdornment}
+                    </>
+                  ),
+                  endAdornment: (
+                    <>
+                      {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                }}
+                
+              />)}
+              
               />
           </Grid>
           <Grid item xs={12} sm={2} md={2}>

@@ -1,10 +1,8 @@
 import {
   Button,
-  FormControl,
   Grid,
-  Input,
+  Icon,
   InputAdornment,
-  InputLabel,
   TextField,
 } from '@mui/material';
 import React from 'react';
@@ -14,7 +12,6 @@ import MDBox from '../../../../theme/components/MDBox';
 import MDTypography from '../../../../theme/components/MDTypography';
 import { TableGrid } from '../../../components/Table/TableGrid';
 import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
 import { Box } from '@mui/system';
 
 export const PersonLayout = ({
@@ -47,7 +44,7 @@ export const PersonLayout = ({
               <Button
                 sx={{ fontSize: 'small' }}
                 variant="contained"
-                startIcon={<AddIcon />}
+                startIcon={<AddIcon fontSize='medium'/>}
               >
                 {buttonTitle}
               </Button>
@@ -68,7 +65,7 @@ export const PersonLayout = ({
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <Icon color='inherit' fontSize='small'>search</Icon>
                   </InputAdornment>
                 ),
               }}

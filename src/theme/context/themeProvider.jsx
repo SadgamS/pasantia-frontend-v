@@ -12,7 +12,7 @@ const init = () => {
     return {
       miniSidenav: false,
       transparentSidenav: false,
-      whiteSidenav: true,
+      whiteSidenav: false,
       sidenavColor: "info",
       transparentNavbar: false,
       fixedNavbar: false,
