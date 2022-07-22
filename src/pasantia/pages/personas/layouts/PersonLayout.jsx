@@ -51,7 +51,7 @@ export const PersonLayout = ({
             </Link>
           </Grid>
           <Box flex={1} />
-          <Grid item mt={3} xs={4}>
+          <Grid item mt={3} xs={10} lg={4}>
             <TextField
               placeholder="Buscar..."
               type="search"

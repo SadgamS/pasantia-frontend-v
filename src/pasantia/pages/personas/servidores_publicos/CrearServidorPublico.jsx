@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Box, Button, Grid, Stack, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Grid, Stack, TextField } from '@mui/material';
 import { FormLayout } from '../../../../layouts/FormLayout';
 import MDTypography from '../../../../theme/components/MDTypography';
 import { DatosPersonalesLayout } from '../layouts/DatosPersonalesLayout';
@@ -48,8 +48,16 @@ export const CrearServidorPublico = () => {
         </Grid>
       </Grid>
       <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
-        <DatosPersonalesLayout control={control} errors={errors}/>
-        <Grid container mt={2}>
+        <Grid container spacing={1} mt={1}>
+          <Grid item lg={6}>
+            <DatosPersonalesLayout control={control} errors={errors}/>
+          </Grid>
+          
+          <Grid item lg={6}>
+          <Card>
+            
+            
+          <Grid container mt={2}>
         <Grid item>
           <MDTypography variant="subtitle2" fontWeight="regular" color="info">
             Datos 
@@ -129,6 +137,11 @@ export const CrearServidorPublico = () => {
             />
         </Grid>
         </Grid>
+        </Card>
+          </Grid>
+
+        </Grid>
+        
       <Stack
           direction="row"
           justifyContent="flex-end"
