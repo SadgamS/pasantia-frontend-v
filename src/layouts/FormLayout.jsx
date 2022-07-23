@@ -10,9 +10,9 @@ export const FormLayout = ({children}) => {
                     sx={{
                         position: "relative",
                           mt: { xs:3,sm:3},
-                          mx: { xs:0,sm:2, md:1, lg:1},
-                          py: { xs:2,sm:2, md:2, lg:2},
-                          px: { xs:2,sm:1, md:1, lg:1},
+                          mx: { xs:0,sm:2, md:-1, lg:-2},
+                          py: { xs:2,sm:2, md:0, lg:0},
+                          px: { xs:2,sm:1, md:0, lg:0},
                           flexGrow: 1,
                       }}
                 >

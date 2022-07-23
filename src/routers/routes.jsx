@@ -11,6 +11,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import { TutoresAcademicos } from '../pasantia/pages/personas/tutores_academicos/TutoresAcademicos';
 
 const routes = [
   {
@@ -56,7 +57,8 @@ const routes = [
         name: 'Tutores academicos',
         key: 'tutores-academicos',
         icon: <Icon fontSize="small">supervisor_account</Icon>,
-        route: '',
+        route: '/tutores-academicos',
+        component: <TutoresAcademicos />
       },
     ],
   },

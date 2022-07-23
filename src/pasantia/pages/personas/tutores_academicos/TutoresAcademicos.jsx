@@ -1,29 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
-import { PersonLayout } from '../layouts/PersonLayout';
-
+import { useEffect, useMemo, useState } from "react";
+import debounceFunction from "../../../../helpers/debounceFunction";
+import apiClient from "../../../../services/api";
+import { PersonLayout } from "../layouts/PersonLayout"
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import apiClient from '../../../../services/api';
-import debounceFunction from '../../../../helpers/debounceFunction';
-
-export const ServidoresPublicos = () => {
+export const TutoresAcademicos = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
-  const [servidoresPublicos, setServidoresPublicos] = useState([]);
+  const [tutoresAcademicos, setTutoresAcademicos] = useState([]);
   const [query, setQuery] = useState('');
 
   const debounceFetchData = useMemo(() => {
     const fetchData = async (page, query) => {
       try {
         const response = await apiClient.get(
-          `/api/servidores-publicos?page=${page + 1}&search=${query}`,
+          `/api/tutores-academicos?page=${page + 1}&search=${query}`,
         );
-        setServidoresPublicos(response.data.data);
+        setTutoresAcademicos(response.data.data);
         setRowCount(response.data.total);
         setPageSize(response.data.per_page);
         setLoading(false);
@@ -58,8 +56,8 @@ export const ServidoresPublicos = () => {
     return `${params.row.persona.ci} ${params.row.persona.expedicion}`;
   };
 
-  const getUnidad = (params) => {
-    return `${params.row.unidad.nombre}`;
+  const getUniversidad = (params) => {
+    return `${params.row.universidad.nombre}`;
   };
 
   const columns = [
@@ -86,12 +84,6 @@ export const ServidoresPublicos = () => {
       flex: 1,
     },
     {
-      field: 'formacion_academica',
-      headerName: 'Formación académica',
-      minWidth: 120,
-      flex: 1,
-    },
-    {
       field: 'nivel_academico',
       headerName: 'Nivel académico',
       valueGetter: '',
@@ -99,9 +91,9 @@ export const ServidoresPublicos = () => {
       flex: 1,
     },
     {
-      field: 'unidad',
-      headerName: 'Unidad',
-      valueGetter: getUnidad,
+      field: 'universidad',
+      headerName: 'Universidad',
+      valueGetter: getUniversidad,
       minWidth: 130,
       flex: 1,
     },
@@ -127,22 +119,21 @@ export const ServidoresPublicos = () => {
       ],
     },
   ];
-
   return (
-    <PersonLayout
-      title="Servidores publicos"
-      subtitle="Página de los servidores publicos"
-      link="/servidores-publicos/crear-servidor-publico"
-      buttonTitle="Agregar servidor publico"
-      rows={servidoresPublicos}
+    <PersonLayout 
+      title="Tutores academicos"
+      subtitle="Pagina de los tutores academicos"
+      link="/tutores-academicos/crear-tutor-academico"
+      buttonTitle="agregar tutor academico"
+      rows={tutoresAcademicos}
+      columns={columns}
       page={page}
       pageSize={pageSize}
       rowCount={rowCount}
-      columns={columns}
       loading={loading}
       setPage={handleChange}
       setQuery={handleQuery}
       query={query}
     />
-  );
-};
+  )
+}
