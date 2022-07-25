@@ -228,6 +228,7 @@ export const DatosPersonales = ({ control, errors }) => {
                 variant="outlined"
                 label="Domicilio"
                 fullWidth
+                multiline
                 autoComplete="off"
               />
             )}

@@ -26,7 +26,7 @@ import { defaultValuesPersonales } from '../forms/defaultValues/defaultDatosPers
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '../forms/validations/validationServidorPublico';
 import apiClient from '../../../../services/api';
-import * as yup from "yup";
+import * as yup from 'yup';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
@@ -51,19 +51,26 @@ export const CrearServidorPublico = () => {
   useEffect(() => {
     getUnidades();
   }, []);
-  
+
   const defaultValues = {
     ...defaultValuesPersonales,
-    formacion_academica: "",
-    nivel_academico: "",
-  }
+    formacion_academica: '',
+    nivel_academico: '',
+  };
   const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]*$/g;
-  const schemaServidorPublico = yup.object({
-    ...schema,
-    formacion_academica: yup.string().required("Por favor, ingresa una formacion").matches(regex, "Solo puede ingresar letras"),
-    nivel_academico: yup.string().required("Por favor, seleccione un Nivel academico"),
-    unidad: yup.object().required("Por favor, seleccione una Unidad")
-  }).required()
+  const schemaServidorPublico = yup
+    .object({
+      ...schema,
+      formacion_academica: yup
+        .string()
+        .required('Por favor, ingresa una formacion')
+        .matches(regex, 'Solo puede ingresar letras'),
+      nivel_academico: yup
+        .string()
+        .required('Por favor, seleccione un Nivel academico'),
+      unidad: yup.object().required('Por favor, seleccione una Unidad'),
+    })
+    .required();
 
   const {
     handleSubmit,
@@ -79,34 +86,32 @@ export const CrearServidorPublico = () => {
     // console.log(data);
     setLoading(true);
     try {
-      const response = await apiClient.post('/api/servidores-publicos/crear',{
+      const response = await apiClient.post('/api/servidores-publicos/crear', {
         ...data,
-        fecha_nacimiento: moment(data.fecha_nacimiento).format("YYYY-MM-DD"),
+        fecha_nacimiento: moment(data.fecha_nacimiento).format('YYYY-MM-DD'),
         celular: Number(data.celular),
         numero_referencia: Number(data.celular_referencia),
         id_unidad: data.unidad.id,
-      })
+      });
       if (response.data.message === 'success') {
         Swal.fire({
           title: 'Agregado con exito!',
           text: 'Se agrego a un nuevo servidor publico',
           icon: 'success',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         setLoading(false);
         navigate('/servidores-publicos');
-      }else if(response.data.message === 'error'){
+      } else if (response.data.message === 'error') {
         Swal.fire({
           title: 'Ocurrio un error al guardar',
           text: 'Por favor intente nuevamente',
           icon: 'error',
         });
-        setLoading(false)
+        setLoading(false);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
   return (
     <FormLayout>
@@ -124,11 +129,11 @@ export const CrearServidorPublico = () => {
       </Grid>
       <Box component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={1} mt={1}>
-          <Grid item md={6} lg={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <DatosPersonales control={control} errors={errors} />
           </Grid>
 
-          <Grid item lg={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Card
               sx={{
                 p: 2,
@@ -142,12 +147,12 @@ export const CrearServidorPublico = () => {
                     fontWeight="medium"
                     color="primary"
                   >
-                    Datos
+                    Datos Académicos
                   </MDTypography>
                 </Grid>
               </Grid>
               <Grid container mt={1} spacing={1} justifyContent="center">
-                <Grid item xs={12} sm={8} md={5} lg={6}>
+                <Grid item xs={12} sm={7} md={7} lg={6}>
                   <Controller
                     name="formacion_academica"
                     control={control}
@@ -158,7 +163,7 @@ export const CrearServidorPublico = () => {
                       <TextField
                         variant="outlined"
                         value={value}
-                        onChange={(e)=>onChange(e.target.value.toUpperCase())}
+                        onChange={(e) => onChange(e.target.value.toUpperCase())}
                         onBlur={onBlur}
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -169,7 +174,7 @@ export const CrearServidorPublico = () => {
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} sm={8} md={5} lg={6}>
+                <Grid item xs={12} sm={5} md={5} lg={6}>
                   <FormControl
                     variant="outlined"
                     fullWidth
@@ -200,13 +205,26 @@ export const CrearServidorPublico = () => {
                       )}
                     />
                     <FormHelperText>
-                      {errors.nivel_academico ? errors.nivel_academico.message : null}
+                      {errors.nivel_academico
+                        ? errors.nivel_academico.message
+                        : null}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
               </Grid>
-              <Grid container mt={2} mb={2} spacing={1} >
-                <Grid item xs={12} sm={8} md={5} lg={12}>
+              <Grid container mt={2}>
+                <Grid item>
+                  <MDTypography
+                    variant="h6"
+                    fontWeight="medium"
+                    color="primary"
+                  >
+                    Unidad a la que pertenece
+                  </MDTypography>
+                </Grid>
+              </Grid>
+              <Grid container mt={2} mb={6} spacing={1}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Controller
                     name="unidad"
                     control={control}
@@ -225,9 +243,7 @@ export const CrearServidorPublico = () => {
                             {...params}
                             error={!!errors.unidad}
                             helperText={
-                              errors.unidad
-                                ? errors.unidad.message
-                                : null
+                              errors.unidad ? errors.unidad.message : null
                             }
                             label="Buscar Unidades..."
                             variant="standard"
@@ -235,13 +251,22 @@ export const CrearServidorPublico = () => {
                               ...params.InputProps,
                               startAdornment: (
                                 <>
-                                  {<Icon color='inherit' fontSize='small'>search</Icon>}
+                                  {
+                                    <Icon color="inherit" fontSize="small">
+                                      search
+                                    </Icon>
+                                  }
                                   {params.InputProps.startAdornment}
                                 </>
                               ),
                               endAdornment: (
                                 <>
-                                  {loadingUnidades ? <CircularProgress color="inherit" size={20} /> : null}
+                                  {loadingUnidades ? (
+                                    <CircularProgress
+                                      color="inherit"
+                                      size={20}
+                                    />
+                                  ) : null}
                                   {params.InputProps.endAdornment}
                                 </>
                               ),
@@ -253,13 +278,16 @@ export const CrearServidorPublico = () => {
                   />
                 </Grid>
               </Grid>
-              <Stack
+            </Card>
+          </Grid>
+        </Grid>
+        <Stack
           direction="row"
           justifyContent="flex-end"
           alignItems="center"
-          spacing={3}
+          spacing={5}
           p={2}
-          mt={2}
+          mt={1}
         >
           <Link to="/servidores-publicos">
             <Button>Cancelar</Button>
@@ -269,15 +297,12 @@ export const CrearServidorPublico = () => {
             variant="contained"
             loading={loading}
             startIcon={<SaveIcon fontSize="medium" />}
+            sx={{ width: 300 }}
           >
             Guardar
           </LoadingButton>
         </Stack>
-            </Card>
-            
-          </Grid>
-        </Grid>
-     </Box>
+      </Box>
     </FormLayout>
   );
 };
