@@ -35,6 +35,8 @@ export const CrearServidorPublico = () => {
   const [loading, setLoading] = useState(false);
   const [loadingUnidades, setLoadingUnidades] = useState(false);
   const [unidades, setUnidades] = useState([]);
+  const [cargos, setCargos] = useState([]);
+  const [loadingCargos, setLoadingCargos] = useState(false);
 
   const getUnidades = async () => {
     setLoadingUnidades(true);
@@ -48,8 +50,21 @@ export const CrearServidorPublico = () => {
     }
   };
 
+  const getCargos = async () => {
+    setLoadingCargos(true);
+    try {
+      const response = await apiClient.get('/api/cargos');
+      setCargos(response.data);
+      setLoadingCargos(false);
+    } catch (error) {
+      setLoadingCargos(false);
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getUnidades();
+    getCargos();
   }, []);
 
   const defaultValues = {
@@ -68,6 +83,7 @@ export const CrearServidorPublico = () => {
       nivel_academico: yup
         .string()
         .required('Por favor, seleccione un Nivel academico'),
+      cargo: yup.object().required('Por favor, seleccione un Cargo'),
       unidad: yup.object().required('Por favor, seleccione una Unidad'),
     })
     .required();
@@ -83,7 +99,6 @@ export const CrearServidorPublico = () => {
   });
   let navigate = useNavigate();
   const onSubmit = async (data) => {
-    // console.log(data);
     setLoading(true);
     try {
       const response = await apiClient.post('/api/servidores-publicos/crear', {
@@ -91,6 +106,7 @@ export const CrearServidorPublico = () => {
         fecha_nacimiento: moment(data.fecha_nacimiento).format('YYYY-MM-DD'),
         celular: Number(data.celular),
         numero_referencia: Number(data.celular_referencia),
+        id_cargo: data.cargo.id,
         id_unidad: data.unidad.id,
       });
       if (response.data.message === 'success') {
@@ -111,7 +127,10 @@ export const CrearServidorPublico = () => {
         });
         setLoading(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
   };
   return (
     <FormLayout>
@@ -133,7 +152,7 @@ export const CrearServidorPublico = () => {
             <DatosPersonales control={control} errors={errors} />
           </Grid>
 
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}> 
             <Card
               sx={{
                 p: 2,
@@ -169,12 +188,13 @@ export const CrearServidorPublico = () => {
                         helperText={error ? error.message : null}
                         label="Formación academica"
                         fullWidth
+                        multiline
                         autoComplete="off"
                       />
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} sm={5} md={5} lg={6}>
+                <Grid item xs={12} sm={5} md={5} lg={6} mb={2}>
                   <FormControl
                     variant="outlined"
                     fullWidth
@@ -212,19 +232,82 @@ export const CrearServidorPublico = () => {
                   </FormControl>
                 </Grid>
               </Grid>
+              
+            </Card>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Card
+              sx={{
+                p: 2,
+                mt: 1,
+              }}
+            >
               <Grid container mt={2}>
                 <Grid item>
                   <MDTypography
-                    variant="h6"
+                    variant="h5"
                     fontWeight="medium"
                     color="primary"
                   >
-                    Unidad a la que pertenece
+                    Datos Institucionles
                   </MDTypography>
                 </Grid>
               </Grid>
-              <Grid container mt={2} mb={6} spacing={1}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid container mt={2} mb={6} spacing={1} justifyContent="center">
+              <Grid item xs={12} sm={10} md={10} lg={11} mt={1}>
+              <Controller
+                    name="cargo"
+                    control={control}
+                    render={({ field: { onChange, onBlur } }) => (
+                      <Autocomplete
+                        onChange={(_, data) => onChange(data)}
+                        onBlur={onBlur}
+                        options={cargos}
+                        loading={loadingCargos}
+                        getOptionLabel={(option) => option.cargo}
+                        isOptionEqualToValue={(option, value) =>
+                          option.cargo === value.cargo
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            error={!!errors.cargo}
+                            helperText={
+                              errors.cargo ? errors.cargo.message : null
+                            }
+                            label="Seleccionar un Cargo..."
+                            variant="standard"
+                            fullWidth
+                            InputProps={{
+                              ...params.InputProps,
+                              startAdornment: (
+                                <>
+                                  {
+                                    <Icon color="inherit" fontSize="small">
+                                      search
+                                    </Icon>
+                                  }
+                                  {params.InputProps.startAdornment}
+                                </>
+                              ),
+                              endAdornment: (
+                                <>
+                                  {loadingCargos ? (
+                                    <CircularProgress
+                                      color="inherit"
+                                      size={20}
+                                    />
+                                  ) : null}
+                                  {params.InputProps.endAdornment}
+                                </>
+                              ),
+                            }}
+                          />
+                        )}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={11} md={11} lg={11} mt={3}>
                   <Controller
                     name="unidad"
                     control={control}
@@ -245,8 +328,9 @@ export const CrearServidorPublico = () => {
                             helperText={
                               errors.unidad ? errors.unidad.message : null
                             }
-                            label="Buscar Unidades..."
+                            label="Seleccionar una Unidad..."
                             variant="standard"
+                            fullWidth
                             InputProps={{
                               ...params.InputProps,
                               startAdornment: (
@@ -279,6 +363,7 @@ export const CrearServidorPublico = () => {
                 </Grid>
               </Grid>
             </Card>
+            </Grid>
           </Grid>
         </Grid>
         <Stack

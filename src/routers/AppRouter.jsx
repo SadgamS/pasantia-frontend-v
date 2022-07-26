@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { LoginPage } from '../auth/pages/LoginPage';
 import { CrearPostulante } from '../pasantia/pages/personas/postulantes/CrearPostulante';
 import { CrearServidorPublico } from '../pasantia/pages/personas/servidores_publicos/CrearServidorPublico';
+import { CrearTutorAcademico } from '../pasantia/pages/personas/tutores_academicos/CrearTutorAcademico';
 import { CrearUsuario } from '../pasantia/pages/usuarios/CrearUsuario';
 
 import routes from './routes';
@@ -42,6 +43,10 @@ const AppRouter = () => {
       <Route
         path="/servidores-publicos/crear-servidor-publico"
         element={<CrearServidorPublico />}
+      />
+      <Route
+        path="/tutores-academicos/crear-tutor-academico"
+        element={<CrearTutorAcademico />}
       />
       <Route path="/auth/login" element={<LoginPage />} />
       <Route path="*" element={<Navigate to="/inicio" />} />

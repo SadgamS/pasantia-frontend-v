@@ -32,18 +32,10 @@ const routes = [
   },
   {
     type: 'subcollapse',
-    name: 'Personas',
-    key: 'personas',
-    icon: <Icon fontSize="small">groups</Icon>,
+    name: 'Institucional',
+    key: 'institucional',
+    icon: <Icon fontSize="small">business_center</Icon>,
     items: [
-      {
-        type: 'collapse',
-        name: 'Postulantes',
-        key: 'postulantes',
-        icon: <Icon fontSize="small">school</Icon>,
-        route: '/postulantes',
-        component: <Postulantes />,
-      },
       {
         type: 'collapse',
         name: 'Servidores publicos',
@@ -54,13 +46,70 @@ const routes = [
       },
       {
         type: 'collapse',
+        name: 'Cargos',
+        key: 'cargos',
+        icon: <Icon fontSize="small">badge</Icon>,
+        route: '/usuarios',
+        component: <Usuarios />,
+      },
+      {
+        type: 'collapse',
+        name: 'Unidades',
+        key: 'unidades',
+        icon: <Icon fontSize="small">domain</Icon>,
+        route: '/usuarios',
+        component: <Usuarios />,
+      },
+    ],
+  },
+  {
+    type: 'subcollapse',
+    name: 'Academico',
+    key: 'academico',
+    icon: <Icon fontSize="small">apartment</Icon>,
+    items: [
+      {
+        type: 'collapse',
+        name: 'Postulantes',
+        key: 'postulantes',
+        icon: <Icon fontSize="small">school</Icon>,
+        route: '/postulantes',
+        component: <Postulantes />,
+      },
+      
+      {
+        type: 'collapse',
         name: 'Tutores academicos',
         key: 'tutores-academicos',
         icon: <Icon fontSize="small">supervisor_account</Icon>,
         route: '/tutores-academicos',
         component: <TutoresAcademicos />
       },
+      {
+        type: 'collapse',
+        name: 'Universidades',
+        key: 'universidades',
+        icon: <Icon fontSize="small">location_city</Icon>,
+        route: '/usuarios',
+        component: <Usuarios />,
+      },
     ],
+  },
+  {
+    type: 'collapse',
+    name: 'Pasantes o Trabajo dirigido',
+    key: 'pasantes',
+    icon: <Icon fontSize="small">assignment_ind</Icon>,
+    route: '/usuarios',
+    component: <Usuarios />,
+  },
+  {
+    type: 'collapse',
+    name: 'Convocatorias',
+    key: 'convocatorias',
+    icon: <Icon fontSize="small">assignment_ind</Icon>,
+    route: '/usuarios',
+    component: <Usuarios />,
   },
 ];
 

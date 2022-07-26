@@ -60,7 +60,7 @@ export const PersonLayout = ({
               focused
               fullWidth
               autoComplete='off'
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value.toUpperCase())}
               value={query}
               InputProps={{
                 startAdornment: (
